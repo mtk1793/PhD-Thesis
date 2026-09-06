@@ -16,3 +16,20 @@
 
 Verified: both files downloaded, size-verified, SHA-256 recorded; integrity
 report generated and committed.
+
+## Phase 1 - Real-data layer
+
+- Implemented `capsm/data/opsd.py`: OPSD loader with parquet cache, documented
+  gap policy (linear interpolation of gaps <= 2 steps, flagged; longer gaps
+  left NaN), chronological train/val/test splits, price window, and
+  extreme renewable ramp mining.
+- Implemented `capsm/data/disaggregate.py`: bus-level load allocation from
+  real German national/control-area profiles onto IEEE 9/14/39/118/300
+  systems at native case magnitudes; renewable placement at documented
+  buses at 20% wind / 10% solar penetration.
+- 8 unit tests added (gap policy, splits, shares, conservation, penetration).
+- Sanity figures + ramp event tables + penetration summary in
+  `results/phase1/`; thesis write-up in `reports/PHASE1_REPORT.md`.
+
+Verified: 8/8 tests pass; gap counts reconcile with Phase 0 integrity
+report; price NaN count equals pre-October-2018 period exactly.

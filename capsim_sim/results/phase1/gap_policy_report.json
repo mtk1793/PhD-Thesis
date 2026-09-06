@@ -1,0 +1,18 @@
+{
+  "interpolated": {
+    "load_actual_mw": 1,
+    "load_forecast_mw": 1,
+    "solar_mw": 0,
+    "wind_offshore_mw": 3,
+    "wind_onshore_mw": 1,
+    "price_day_ahead_eur": 5
+  },
+  "left_nan": {
+    "load_actual_mw": 0,
+    "load_forecast_mw": 24,
+    "solar_mw": 104,
+    "wind_offshore_mw": 72,
+    "wind_onshore_mw": 72,
+    "price_day_ahead_eur": 32856
+  }
+}
