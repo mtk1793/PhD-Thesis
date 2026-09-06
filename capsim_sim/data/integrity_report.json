@@ -1,0 +1,658 @@
+{
+  "dataset": "Open Power System Data - Time series",
+  "version": "2020-10-06",
+  "doi": "https://doi.org/10.25832/time_series/2020-10-06",
+  "files": {
+    "60min": {
+      "file": "time_series_60min_singleindex.csv",
+      "frequency": "h",
+      "coverage": {
+        "start_utc": "2014-12-31 23:00:00+00:00",
+        "end_utc": "2020-09-30 23:00:00+00:00",
+        "expected_points": 50401,
+        "actual_points": 50401,
+        "missing_timestamps": 0,
+        "missing_timestamp_list": [],
+        "duplicate_timestamps": 0
+      },
+      "columns": {
+        "DE_load_actual_entsoe_transparency": {
+          "present": true,
+          "column": "DE_load_actual_entsoe_transparency",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 31307.0,
+          "max": 77549.0,
+          "mean": 55492.4685515873
+        },
+        "DE_load_forecast_entsoe_transparency": {
+          "present": true,
+          "column": "DE_load_forecast_entsoe_transparency",
+          "n_points": 50401,
+          "nan_count": 25,
+          "nan_pct": 0.05,
+          "n_gap_runs": 2,
+          "n_gap_runs_gt_2_steps": 1,
+          "steps_in_long_gaps": 24,
+          "longest_gap_steps": 24,
+          "gap_runs_over_2": [
+            [
+              "32687",
+              "32710",
+              24
+            ]
+          ],
+          "min": 28824.0,
+          "max": 75912.0,
+          "mean": 54791.384230585994
+        },
+        "DE_solar_generation_actual": {
+          "present": true,
+          "column": "DE_solar_generation_actual",
+          "n_points": 50401,
+          "nan_count": 104,
+          "nan_pct": 0.206,
+          "n_gap_runs": 5,
+          "n_gap_runs_gt_2_steps": 5,
+          "steps_in_long_gaps": 104,
+          "longest_gap_steps": 24,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "7",
+              8
+            ],
+            [
+              "1393",
+              "1416",
+              24
+            ],
+            [
+              "12406",
+              "12429",
+              24
+            ],
+            [
+              "15983",
+              "16006",
+              24
+            ],
+            [
+              "16992",
+              "17015",
+              24
+            ]
+          ],
+          "min": 0.0,
+          "max": 32947.0,
+          "mean": 4566.042905143448
+        },
+        "DE_wind_generation_actual": {
+          "present": true,
+          "column": "DE_wind_generation_actual",
+          "n_points": 50401,
+          "nan_count": 75,
+          "nan_pct": 0.149,
+          "n_gap_runs": 5,
+          "n_gap_runs_gt_2_steps": 3,
+          "steps_in_long_gaps": 72,
+          "longest_gap_steps": 24,
+          "gap_runs_over_2": [
+            [
+              "12406",
+              "12429",
+              24
+            ],
+            [
+              "15983",
+              "16006",
+              24
+            ],
+            [
+              "16992",
+              "17015",
+              24
+            ]
+          ],
+          "min": 135.0,
+          "max": 46064.0,
+          "mean": 11552.23465008147
+        },
+        "DE_wind_onshore_generation_actual": {
+          "present": true,
+          "column": "DE_wind_onshore_generation_actual",
+          "n_points": 50401,
+          "nan_count": 73,
+          "nan_pct": 0.145,
+          "n_gap_runs": 4,
+          "n_gap_runs_gt_2_steps": 3,
+          "steps_in_long_gaps": 72,
+          "longest_gap_steps": 24,
+          "gap_runs_over_2": [
+            [
+              "12406",
+              "12429",
+              24
+            ],
+            [
+              "15983",
+              "16006",
+              24
+            ],
+            [
+              "16992",
+              "17015",
+              24
+            ]
+          ],
+          "min": 119.0,
+          "max": 40752.0,
+          "mean": 9581.469321252584
+        },
+        "DE_wind_offshore_generation_actual": {
+          "present": true,
+          "column": "DE_wind_offshore_generation_actual",
+          "n_points": 50401,
+          "nan_count": 75,
+          "nan_pct": 0.149,
+          "n_gap_runs": 5,
+          "n_gap_runs_gt_2_steps": 3,
+          "steps_in_long_gaps": 72,
+          "longest_gap_steps": 24,
+          "gap_runs_over_2": [
+            [
+              "12406",
+              "12429",
+              24
+            ],
+            [
+              "15983",
+              "16006",
+              24
+            ],
+            [
+              "16992",
+              "17015",
+              24
+            ]
+          ],
+          "min": 0.0,
+          "max": 6901.0,
+          "mean": 1970.4809839844215
+        },
+        "DE_LU_price_day_ahead": {
+          "present": true,
+          "column": "DE_LU_price_day_ahead",
+          "n_points": 50401,
+          "nan_count": 32861,
+          "nan_pct": 65.199,
+          "n_gap_runs": 4,
+          "n_gap_runs_gt_2_steps": 1,
+          "steps_in_long_gaps": 32856,
+          "longest_gap_steps": 32856,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "32855",
+              32856
+            ]
+          ],
+          "min": -90.01,
+          "max": 200.04,
+          "mean": 35.80928791334094
+        },
+        "DE_50hertz_load_actual_entsoe_transparency": {
+          "present": true,
+          "column": "DE_50hertz_load_actual_entsoe_transparency",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 106.0,
+          "max": 16581.0,
+          "mean": 10404.450992063492
+        },
+        "DE_amprion_load_actual_entsoe_transparency": {
+          "present": true,
+          "column": "DE_amprion_load_actual_entsoe_transparency",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 11598.0,
+          "max": 32060.0,
+          "mean": 20943.023115079366
+        },
+        "DE_tennet_load_actual_entsoe_transparency": {
+          "present": true,
+          "column": "DE_tennet_load_actual_entsoe_transparency",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 9495.0,
+          "max": 24577.0,
+          "mean": 17184.740813492062
+        },
+        "DE_transnetbw_load_actual_entsoe_transparency": {
+          "present": true,
+          "column": "DE_transnetbw_load_actual_entsoe_transparency",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 3452.0,
+          "max": 11733.0,
+          "mean": 6960.462103174603
+        },
+        "DE_50hertz_solar_generation_actual": {
+          "present": true,
+          "column": "DE_50hertz_solar_generation_actual",
+          "n_points": 50401,
+          "nan_count": 15,
+          "nan_pct": 0.03,
+          "n_gap_runs": 2,
+          "n_gap_runs_gt_2_steps": 2,
+          "steps_in_long_gaps": 15,
+          "longest_gap_steps": 8,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "7",
+              8
+            ],
+            [
+              "50394",
+              "50400",
+              7
+            ]
+          ],
+          "min": 0.0,
+          "max": 9121.0,
+          "mean": 1177.3407891080856
+        },
+        "DE_amprion_solar_generation_actual": {
+          "present": true,
+          "column": "DE_amprion_solar_generation_actual",
+          "n_points": 50401,
+          "nan_count": 14,
+          "nan_pct": 0.028,
+          "n_gap_runs": 2,
+          "n_gap_runs_gt_2_steps": 2,
+          "steps_in_long_gaps": 14,
+          "longest_gap_steps": 8,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "7",
+              8
+            ],
+            [
+              "50395",
+              "50400",
+              6
+            ]
+          ],
+          "min": 0.0,
+          "max": 7609.0,
+          "mean": 1051.5354952666362
+        },
+        "DE_tennet_solar_generation_actual": {
+          "present": true,
+          "column": "DE_tennet_solar_generation_actual",
+          "n_points": 50401,
+          "nan_count": 8,
+          "nan_pct": 0.016,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 1,
+          "steps_in_long_gaps": 8,
+          "longest_gap_steps": 8,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "7",
+              8
+            ]
+          ],
+          "min": 0.0,
+          "max": 12301.0,
+          "mean": 1692.7404202964697
+        },
+        "DE_transnetbw_solar_generation_actual": {
+          "present": true,
+          "column": "DE_transnetbw_solar_generation_actual",
+          "n_points": 50401,
+          "nan_count": 15,
+          "nan_pct": 0.03,
+          "n_gap_runs": 2,
+          "n_gap_runs_gt_2_steps": 2,
+          "steps_in_long_gaps": 15,
+          "longest_gap_steps": 8,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "7",
+              8
+            ],
+            [
+              "50394",
+              "50400",
+              7
+            ]
+          ],
+          "min": 0.0,
+          "max": 4453.0,
+          "mean": 640.9916841979915
+        },
+        "DE_50hertz_wind_generation_actual": {
+          "present": true,
+          "column": "DE_50hertz_wind_generation_actual",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 8.0,
+          "max": 16153.0,
+          "mean": 3724.2679166666667
+        },
+        "DE_amprion_wind_onshore_generation_actual": {
+          "present": true,
+          "column": "DE_amprion_wind_onshore_generation_actual",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 0.0,
+          "max": 9443.0,
+          "mean": 1857.2409126984128
+        },
+        "DE_tennet_wind_generation_actual": {
+          "present": true,
+          "column": "DE_tennet_wind_generation_actual",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 20.0,
+          "max": 20631.0,
+          "mean": 5725.275119047619
+        },
+        "DE_transnetbw_wind_onshore_generation_actual": {
+          "present": true,
+          "column": "DE_transnetbw_wind_onshore_generation_actual",
+          "n_points": 50401,
+          "nan_count": 1,
+          "nan_pct": 0.002,
+          "n_gap_runs": 1,
+          "n_gap_runs_gt_2_steps": 0,
+          "steps_in_long_gaps": 0,
+          "longest_gap_steps": 1,
+          "gap_runs_over_2": [],
+          "min": 0.0,
+          "max": 1474.0,
+          "mean": 248.0467658730159
+        }
+      }
+    },
+    "15min": {
+      "file": "time_series_15min_singleindex.csv",
+      "frequency": "15min",
+      "coverage": {
+        "start_utc": "2014-12-31 23:00:00+00:00",
+        "end_utc": "2020-09-30 23:45:00+00:00",
+        "expected_points": 201604,
+        "actual_points": 201604,
+        "missing_timestamps": 0,
+        "missing_timestamp_list": [],
+        "duplicate_timestamps": 0
+      },
+      "columns": {
+        "DE_load_actual_entsoe_transparency": {
+          "present": true,
+          "column": "DE_load_actual_entsoe_transparency",
+          "n_points": 201604,
+          "nan_count": 6,
+          "nan_pct": 0.003,
+          "n_gap_runs": 2,
+          "n_gap_runs_gt_2_steps": 1,
+          "steps_in_long_gaps": 5,
+          "longest_gap_steps": 5,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "4",
+              5
+            ]
+          ],
+          "min": 29158.12,
+          "max": 77852.94,
+          "mean": 55492.58970031945
+        },
+        "DE_load_forecast_entsoe_transparency": {
+          "present": true,
+          "column": "DE_load_forecast_entsoe_transparency",
+          "n_points": 201604,
+          "nan_count": 102,
+          "nan_pct": 0.051,
+          "n_gap_runs": 3,
+          "n_gap_runs_gt_2_steps": 2,
+          "steps_in_long_gaps": 101,
+          "longest_gap_steps": 96,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "4",
+              5
+            ],
+            [
+              "130748",
+              "130843",
+              96
+            ]
+          ],
+          "min": 28675.41,
+          "max": 76392.52,
+          "mean": 54791.50697452135
+        },
+        "DE_solar_generation_actual": {
+          "present": true,
+          "column": "DE_solar_generation_actual",
+          "n_points": 201604,
+          "nan_count": 420,
+          "nan_pct": 0.208,
+          "n_gap_runs": 6,
+          "n_gap_runs_gt_2_steps": 6,
+          "steps_in_long_gaps": 420,
+          "longest_gap_steps": 96,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "32",
+              33
+            ],
+            [
+              "5572",
+              "5667",
+              96
+            ],
+            [
+              "49624",
+              "49719",
+              96
+            ],
+            [
+              "63932",
+              "64027",
+              96
+            ],
+            [
+              "67968",
+              "68063",
+              96
+            ],
+            [
+              "201601",
+              "201603",
+              3
+            ]
+          ],
+          "min": 0.0,
+          "max": 33193.77,
+          "mean": 4566.134214823246
+        },
+        "DE_wind_generation_actual": {
+          "present": true,
+          "column": "DE_wind_generation_actual",
+          "n_points": 201604,
+          "nan_count": 304,
+          "nan_pct": 0.151,
+          "n_gap_runs": 6,
+          "n_gap_runs_gt_2_steps": 5,
+          "steps_in_long_gaps": 303,
+          "longest_gap_steps": 96,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "4",
+              5
+            ],
+            [
+              "49624",
+              "49719",
+              96
+            ],
+            [
+              "63932",
+              "64027",
+              96
+            ],
+            [
+              "64571",
+              "64580",
+              10
+            ],
+            [
+              "67968",
+              "68063",
+              96
+            ]
+          ],
+          "min": 104.66,
+          "max": 46205.63,
+          "mean": 11552.324213164431
+        },
+        "DE_wind_offshore_generation_actual": {
+          "present": true,
+          "column": "DE_wind_offshore_generation_actual",
+          "n_points": 201604,
+          "nan_count": 304,
+          "nan_pct": 0.151,
+          "n_gap_runs": 6,
+          "n_gap_runs_gt_2_steps": 5,
+          "steps_in_long_gaps": 303,
+          "longest_gap_steps": 96,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "4",
+              5
+            ],
+            [
+              "49624",
+              "49719",
+              96
+            ],
+            [
+              "63932",
+              "64027",
+              96
+            ],
+            [
+              "64571",
+              "64580",
+              10
+            ],
+            [
+              "67968",
+              "68063",
+              96
+            ]
+          ],
+          "min": 0.0,
+          "max": 6990.36,
+          "mean": 1970.4853562593146
+        },
+        "DE_wind_onshore_generation_actual": {
+          "present": true,
+          "column": "DE_wind_onshore_generation_actual",
+          "n_points": 201604,
+          "nan_count": 294,
+          "nan_pct": 0.146,
+          "n_gap_runs": 5,
+          "n_gap_runs_gt_2_steps": 4,
+          "steps_in_long_gaps": 293,
+          "longest_gap_steps": 96,
+          "gap_runs_over_2": [
+            [
+              "0",
+              "4",
+              5
+            ],
+            [
+              "49624",
+              "49719",
+              96
+            ],
+            [
+              "63932",
+              "64027",
+              96
+            ],
+            [
+              "67968",
+              "68063",
+              96
+            ]
+          ],
+          "min": 87.75,
+          "max": 40929.67,
+          "mean": 9581.485665143311
+        }
+      }
+    }
+  }
+}

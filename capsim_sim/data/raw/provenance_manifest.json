@@ -1,0 +1,24 @@
+{
+  "dataset": "Open Power System Data - Time series",
+  "version": "2020-10-06",
+  "doi": "https://doi.org/10.25832/time_series/2020-10-06",
+  "primary_source": "ENTSO-E Transparency Platform (measured values)",
+  "attribution": "Open Power System Data. 2020. Data Package Time series. Version 2020-10-06. https://doi.org/10.25832/time_series/2020-10-06. (Primary data from ENTSO-E Transparency.)",
+  "verified_at_utc": "2026-09-06T12:29:40.692764+00:00",
+  "files": {
+    "time_series_60min_singleindex.csv": {
+      "url": "https://data.open-power-system-data.org/time_series/2020-10-06/time_series_60min_singleindex.csv",
+      "bytes": 130339665,
+      "expected_min_bytes": 124000000,
+      "size_ok": true,
+      "sha256": "6a7f2bc571314cbf9c321cc03437691cd4be95c3a6f075e60ff99e8035c704c8"
+    },
+    "time_series_15min_singleindex.csv": {
+      "url": "https://data.open-power-system-data.org/time_series/2020-10-06/time_series_15min_singleindex.csv",
+      "bytes": 112072477,
+      "expected_min_bytes": 107000000,
+      "size_ok": true,
+      "sha256": "194f3ee7d110d04389751602132899172cdd8b7ca73c07d6e9009ddac066b2a1"
+    }
+  }
+}
