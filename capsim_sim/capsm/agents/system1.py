@@ -54,7 +54,8 @@ class StateEncoder:
         parts.append(obs["vm"].astype(np.float32))
         parts.append(obs["va"].astype(np.float32))
         parts.append(obs["branch_pf"].astype(np.float32))
-        gen = self._env.ppc["gen"]
+        ppc = self._env.ppc if self._env.ppc is not None else self._env.base_ppc
+        gen = ppc["gen"]
         parts.append(gen[:, 1].astype(np.float32))
         parts.append(gen[:, 2].astype(np.float32))
         facts_vec = np.zeros(self.n_facts * 2, dtype=np.float32)

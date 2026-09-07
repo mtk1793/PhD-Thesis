@@ -1,0 +1,68 @@
+{
+  "no_control": {
+    "mean_losses_mw": 46.11,
+    "max_losses_mw": 245.35,
+    "mean_voltage_dev_pu": 0.0286,
+    "voltage_violation_hours": 2847,
+    "min_vm_min": 0.8767,
+    "converged": 721,
+    "n_steps": 721,
+    "time_s": 16.9,
+    "ms_per_step": 23.5
+  },
+  "rule_based": {
+    "mean_losses_mw": 46.11,
+    "max_losses_mw": 245.35,
+    "mean_voltage_dev_pu": 0.0286,
+    "voltage_violation_hours": 2846,
+    "min_vm_min": 0.8767,
+    "converged": 721,
+    "n_steps": 721,
+    "time_s": 17.2,
+    "ms_per_step": 23.9
+  },
+  "pid": {
+    "mean_losses_mw": 46.12,
+    "max_losses_mw": 245.41,
+    "mean_voltage_dev_pu": 0.0286,
+    "voltage_violation_hours": 2842,
+    "min_vm_min": 0.8766,
+    "converged": 721,
+    "n_steps": 721,
+    "time_s": 17.5,
+    "ms_per_step": 24.3
+  },
+  "system1": {
+    "mean_losses_mw": 46.15,
+    "max_losses_mw": 243.99,
+    "mean_voltage_dev_pu": 0.0285,
+    "voltage_violation_hours": 2822,
+    "min_vm_min": 0.8796,
+    "converged": 721,
+    "n_steps": 721,
+    "time_s": 23.1,
+    "ms_per_step": 32.0
+  },
+  "system2": {
+    "mean_losses_mw": 46.19,
+    "max_losses_mw": 243.03,
+    "mean_voltage_dev_pu": 0.0285,
+    "voltage_violation_hours": 2810,
+    "min_vm_min": 0.8817,
+    "converged": 721,
+    "n_steps": 721,
+    "time_s": 19.9,
+    "ms_per_step": 27.6
+  },
+  "capsm": {
+    "mean_losses_mw": 46.17,
+    "max_losses_mw": 243.74,
+    "mean_voltage_dev_pu": 0.0285,
+    "voltage_violation_hours": 2813,
+    "min_vm_min": 0.88,
+    "converged": 721,
+    "n_steps": 721,
+    "time_s": 26.3,
+    "ms_per_step": 36.5
+  }
+}
