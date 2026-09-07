@@ -33,3 +33,27 @@ report generated and committed.
 
 Verified: 8/8 tests pass; gap counts reconcile with Phase 0 integrity
 report; price NaN count equals pre-October-2018 period exactly.
+
+## Phase 2 - QSTS grid environment on real data
+
+- Implemented `capsm/grid/environment.py`: PYPOWER AC power flow per
+  timestamp driven by real profiles; controller interface for FACTS
+  setpoints and EV dispatch.
+- Implemented FACTS models (SVC/STATCOM shunt, TCSC series, UPFC combined,
+  thesis placement on IEEE 39-bus), aggregate EV V2G fleet (buses 3/8/15),
+  event injection (line trips, FDI), and system metrics.
+- Added two documented modelling rules required for convergence under deep
+  renewable penetration: 90% renewable curtailment cap (activated 15 h in
+  Jan 2019) and proportional generation redispatch with slack balancing.
+- Fixed: pandas 3.0 iloc boolean-mask assignment silently dropping values
+  (switched to numpy matrix construction); EV dispatch being overwritten by
+  load assignment; reactive load now scales at constant power factor.
+- 8 new unit tests (16 total, all passing); verification runs: 100%
+  convergence on IEEE 9/14/39/118 over real Jan-2019 data; 7.8 ms/step on
+  IEEE 39-bus; contingency injection validated (losses +23.2% on line
+  16-17 trip).
+- Artifacts in `results/phase2/`; thesis write-up in
+  `reports/PHASE2_REPORT.md`.
+
+Verified: 16/16 tests pass; month-long QSTS on case39 converged 721/721
+steps; trip/restore reproduces pre-contingency flows exactly.

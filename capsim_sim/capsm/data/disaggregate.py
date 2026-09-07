@@ -77,13 +77,12 @@ def build_bus_loads(case_name: str, df: pd.DataFrame, regional: bool = True) -> 
     base = ppc["bus"][:, PD]
     if regional:
         areas = assign_control_areas(ppc)
-        out = pd.DataFrame(index=df.index, columns=buses, dtype=float)
+        mat = np.zeros((len(df), len(buses)))
         for area in CONTROL_AREAS:
             profile = (df[f"{area}_load_mw"] / df[f"{area}_load_mw"].mean()).to_numpy()
             idx = np.array([areas.get(b) == area for b in buses])
-            out.iloc[:, idx] = np.outer(profile, base[idx])
-        out.columns = [f"bus_{b}" for b in buses]
-        return out
+            mat[:, idx] = np.outer(profile, base[idx])
+        return pd.DataFrame(mat, index=df.index, columns=[f"bus_{b}" for b in buses])
     profile = (df["load_actual_mw"] / df["load_actual_mw"].mean()).to_numpy()
     out = pd.DataFrame(np.outer(profile, base), index=df.index, columns=[f"bus_{b}" for b in buses])
     return out
