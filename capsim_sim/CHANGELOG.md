@@ -57,3 +57,29 @@ report; price NaN count equals pre-October-2018 period exactly.
 
 Verified: 16/16 tests pass; month-long QSTS on case39 converged 721/721
 steps; trip/restore reproduces pre-contingency flows exactly.
+
+## Phase 3 - Baseline controllers and vulnerability benchmark
+
+- Implemented `capsm/agents/baselines.py`: NoControl, RuleBasedVoltage (Kp=5
+  local droop), PIDVoltage (Kp=5, Ki=2 local PI) at thesis FACTS locations.
+- Implemented `capsm/grid/stability.py`: loading-margin bisection (binary
+  search on load-scale factor until Newton diverges).
+- Added base-case VG tuning: generator voltage setpoints capped at 1.04 pu
+  to remove false-positive violations from raw IEEE case artifacts (e.g.,
+  bus 36 in case39 at 1.064 pu).
+- Fixed `run_controller` contingency injection: injected flag prevents
+  re-firing every step; restore-after correctly triggers after delay.
+- January 2019 benchmark (case39, 721 h): 2847 violation bus-hours
+  (uncontrolled); rule-based reduces by 1 hour, PID by 5. Local droop/PI
+  at SVC@14/STATCOM@39 is ineffective because violations concentrate at
+  buses 22-29, electrically distant from device locations. Generator voltage
+  regulation at device buses overrides shunt injection.
+- Loading margins: valley (2388 MW) = 2.53x, peak (6195 MW) = 1.45x.
+- N-1 contingency (line 16-17 trip at peak): +14.9% losses, min vm 0.951,
+  full convergence — system robust to single contingencies.
+- 6 new unit tests (22 total, all passing).
+- Artifacts in `results/phase3/`; thesis write-up in
+  `reports/PHASE3_REPORT.md`.
+
+Verified: 22/22 tests pass; local controllers near-zero impact motivates
+CAPSM coordinated AI control architecture.

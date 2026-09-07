@@ -1,0 +1,73 @@
+{
+  "no_control": {
+    "n_steps": 721,
+    "converged": 721,
+    "mean_losses_mw": 46.110809745233446,
+    "max_losses_mw": 245.3508687409314,
+    "mean_voltage_dev_pu": 0.0285765584363914,
+    "min_vm": 0.8766849232844197,
+    "max_vm": 1.0736648237292719,
+    "voltage_violation_bus_hours": 2847,
+    "overload_line_hours": 900,
+    "energy_cost_meur": 171.62519298170375,
+    "runtime_s": 18.3,
+    "curtailment_hours": 15,
+    "loading_margin_valley": 2.53,
+    "loading_margin_peak": 1.452
+  },
+  "rule_based": {
+    "n_steps": 721,
+    "converged": 721,
+    "mean_losses_mw": 46.110786320899805,
+    "max_losses_mw": 245.3480224943113,
+    "mean_voltage_dev_pu": 0.02856842305352622,
+    "min_vm": 0.8766908950927658,
+    "max_vm": 1.0735967316677788,
+    "voltage_violation_bus_hours": 2846,
+    "overload_line_hours": 900,
+    "energy_cost_meur": 171.62518858126282,
+    "runtime_s": 24.8,
+    "curtailment_hours": 15,
+    "loading_margin_valley": 2.53,
+    "loading_margin_peak": 1.452
+  },
+  "pid": {
+    "n_steps": 721,
+    "converged": 721,
+    "mean_losses_mw": 46.11583159865601,
+    "max_losses_mw": 245.4083763895147,
+    "mean_voltage_dev_pu": 0.02855789933623776,
+    "min_vm": 0.8766134128719725,
+    "max_vm": 1.0735679686610757,
+    "voltage_violation_bus_hours": 2842,
+    "overload_line_hours": 900,
+    "energy_cost_meur": 171.62538373440498,
+    "runtime_s": 28.1,
+    "curtailment_hours": 15,
+    "loading_margin_valley": 2.53,
+    "loading_margin_peak": 1.452
+  },
+  "contingency": {
+    "no_control": {
+      "pre_losses_mw": 51.1,
+      "during_losses_mw": 58.7,
+      "losses_increase_pct": 14.9,
+      "min_vm_during": 0.9505,
+      "converged_during": 13
+    },
+    "rule_based": {
+      "pre_losses_mw": 51.1,
+      "during_losses_mw": 58.7,
+      "losses_increase_pct": 14.9,
+      "min_vm_during": 0.9505,
+      "converged_during": 13
+    },
+    "pid": {
+      "pre_losses_mw": 51.1,
+      "during_losses_mw": 58.7,
+      "losses_increase_pct": 14.9,
+      "min_vm_during": 0.9505,
+      "converged_during": 13
+    }
+  }
+}

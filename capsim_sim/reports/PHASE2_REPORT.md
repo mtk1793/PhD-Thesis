@@ -53,25 +53,25 @@ activation is counted and reported (no hidden data manipulation).
 
 | System | Steps | Converged | Mean losses (MW) | min Vm (p.u.) | ms/step |
 |---|---|---|---|---|---|
-| IEEE 39 (full month) | 721 | 721 (100%) | 45.7 | 0.882 | 7.8 |
+| IEEE 39 (full month) | 721 | 721 (100%) | 46.1 | 0.877 | 7.8 |
 | IEEE 9 (week) | 145 | 145 (100%) | 4.4 | 0.925 | ~2 |
-| IEEE 14 (week) | 145 | 145 (100%) | 8.6 | 1.010 | ~3 |
+| IEEE 14 (week) | 145 | 145 (100%) | 9.2 | 0.990 | ~3 |
 | IEEE 118 (week) | 145 | 145 (100%) | 220.0 | 0.773 | ~15 |
 
 Uncontrolled IEEE 39-bus, January 2019 (the stress the CAPSM controllers
 must address):
 - Total load range: 3,861 - 7,748 MW (real German shape on native scale)
-- Losses: mean 45.7 MW, peak 240.0 MW
-- Voltages: min 0.882 p.u., max 1.077 p.u.; mean deviation 0.032 p.u.
-- Voltage-limit violations: 5,233 bus-hours (0.95 / 1.05 p.u. limits)
+- Losses: mean 46.1 MW, peak 245.4 MW
+- Voltages: min 0.877 p.u., max 1.074 p.u.; mean deviation 0.029 p.u.
+- Voltage-limit violations: 2,847 bus-hours (0.95 / 1.05 p.u. limits)
 - Overloaded lines: 900 line-hours; peak line loading 4.40 x rating
 - Renewable curtailment activated: 15 hours (2.1% of the month)
 
 ## 4. Contingency Injection (line 16-17 trip, 2019-01-15 12:00 UTC)
 
 Under real operating conditions at the moment of injection:
-- Losses rise from 60.1 MW (pre-event mean) to 74.1 MW (+23.2%)
-- Minimum system voltage drops from 0.975 to 0.961 p.u.
+- Losses rise from 51.1 MW (pre-event mean) to 58.7 MW (+14.9%)
+- Minimum system voltage: 0.951 p.u. during the contingency window
 - Power flow remains converged (N-1 secure for this contingency at this
   operating point), and restoration returns the system to the exact
   pre-contingency state (verified numerically in tests)
@@ -107,3 +107,13 @@ Under real operating conditions at the moment of injection:
 - All voltages/flows/losses above are real-data-driven results, suitable
   for Chapter 10 (simulation platform) and Chapter 11 (uncontrolled
   baseline) of the thesis.
+
+## 8. Base-Case VG Tuning (applied retroactively)
+
+The raw IEEE 39-bus case ships with generator voltage setpoints up to
+1.064 p.u. (bus 36), above the 1.05 p.u. planning limit. These cause
+persistent violations inherent to the case data, not to real-data
+operation. Generator VG setpoints are capped at 1.04 p.u. in the
+environment constructor (documented, configurable). This removed
+~2,386 false-positive violation bus-hours, leaving 2,847 genuine
+operational violations for the baselines to address.

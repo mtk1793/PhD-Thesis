@@ -2,13 +2,13 @@
   "case39_jan2019": {
     "n_steps": 721,
     "converged": 721,
-    "mean_losses_mw": 45.74696369050791,
-    "max_losses_mw": 239.98451952815952,
-    "min_vm": 0.8821085659313399,
-    "max_vm": 1.0770734480019593,
-    "mean_voltage_dev_pu": 0.032025595162585754,
-    "max_line_loading": 4.395671251479409,
-    "voltage_violation_hours": 5233,
+    "mean_losses_mw": 46.110809745233446,
+    "max_losses_mw": 245.3508687409314,
+    "min_vm": 0.8766849232844197,
+    "max_vm": 1.0736648237292719,
+    "mean_voltage_dev_pu": 0.0285765584363914,
+    "max_line_loading": 4.394276875826535,
+    "voltage_violation_hours": 2847,
     "overload_hours": 900,
     "load_min_mw": 3860.679846758464,
     "load_max_mw": 7747.66114679863
@@ -24,17 +24,17 @@
   "case14_jan2019_week": {
     "n_steps": 145,
     "converged": 145,
-    "mean_losses_mw": 8.611704110178351,
-    "min_vm": 1.0099999999999996,
-    "max_line_loading": 0.01910665533668916,
+    "mean_losses_mw": 9.173635025791878,
+    "min_vm": 0.9904320356076185,
+    "max_line_loading": 0.019286784439967487,
     "ms_per_step": null
   },
   "case118_jan2019_week": {
     "n_steps": 145,
     "converged": 145,
-    "mean_losses_mw": 220.01087942953615,
-    "min_vm": 0.7729926063685799,
-    "max_line_loading": 0.10922946041638947,
+    "mean_losses_mw": 219.97536194321958,
+    "min_vm": 0.7728050153324385,
+    "max_line_loading": 0.10921286666767077,
     "ms_per_step": null
   }
 }

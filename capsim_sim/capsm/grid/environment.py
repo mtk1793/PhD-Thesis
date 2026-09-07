@@ -42,9 +42,12 @@ class QSTSEnvironment:
         curtail_share: float = 0.90,
         gen_factor_min: float = 0.20,
         gen_factor_max: float = 1.50,
+        tune_gen_voltages: float = 1.04,
     ):
         self.case_name = case_name
         self.base_ppc = get_case(case_name)
+        if tune_gen_voltages is not None:
+            self._tune_gen_voltages(tune_gen_voltages)
         self.dt = dt_hours
         self.bus_ids = self.base_ppc["bus"][:, 0].astype(int)
         self._bus_pos = {int(b): i for i, b in enumerate(self.bus_ids)}
@@ -76,6 +79,29 @@ class QSTSEnvironment:
         else:
             self.loss_est_mw = 0.01 * self.base_net_load
         self.curtailment_hours = 0
+
+    def _tune_gen_voltages(self, vcap: float) -> None:
+        """Cap generator voltage setpoints at vcap (base-case preparation).
+
+        The raw IEEE cases ship with VG setpoints above the 1.05 p.u.
+        planning limit (e.g., bus 36 in case39 at 1.064), which would
+        register as violations unrelated to the real-data operation under
+        study. Setpoints above the cap are reduced to it (both in the gen
+        matrix, which is what the power flow regulates to, and the bus
+        initial-voltage column); all other case data are untouched.
+        """
+        from pypower.idx_gen import VG
+
+        gen = self.base_ppc["gen"]
+        high = gen[:, VG] > vcap
+        self._n_vg_tuned = int(high.sum())
+        if high.any():
+            gen[high, VG] = vcap
+            gen_buses = set(gen[high, GEN_BUS].astype(int).tolist())
+            bus = self.base_ppc["bus"]
+            for i in range(bus.shape[0]):
+                if int(bus[i, 0]) in gen_buses:
+                    bus[i, VM_COL] = min(bus[i, VM_COL], vcap)
 
     def reset(self, start: str | None = None, seed: int | None = None) -> dict:
         if seed is not None:
@@ -117,14 +143,14 @@ class QSTSEnvironment:
         if self.ev_fleet is not None and "ev" in controls:
             self.ev_fleet.dispatch(controls["ev"])
 
-    def _solve(self, controls: dict | None) -> dict:
+    def _solve(self, controls: dict | None, load_scale: float = 1.0) -> dict:
         assert self.ppc is not None, "call reset() first"
         ppc = copy.deepcopy(self.base_ppc)
         self._apply_controls(controls)
         for d in self.facts:
             d.apply(ppc)
         ts = self.timestamps[self.t]
-        load_vec = self.bus_loads.iloc[self.t].to_numpy()
+        load_vec = self.bus_loads.iloc[self.t].to_numpy() * load_scale
         ppc["bus"][:, PD] = load_vec
         ppc["bus"][:, QD] = self._build_qd(load_vec)
 
@@ -163,6 +189,7 @@ class QSTSEnvironment:
             "branch_pf": result["branch"][:, PF].copy(),
             "branch_pt": result["branch"][:, PT].copy(),
             "total_load_mw": float(np.sum(load_vec)),
+            "total_gen_mw": float(np.sum(result["gen"][:, PG])) if success else None,
             "metrics": metrics_from_ppc(result) if success else {},
             "ev_state": self.ev_fleet.state() if self.ev_fleet else None,
         }
@@ -223,7 +250,8 @@ class QSTSEnvironment:
 
     def _row(self, obs: dict) -> dict:
         row = {"timestamp": obs["timestamp"], **obs["metrics"],
-               "total_load_mw": obs["total_load_mw"], "converged": obs["converged"]}
+               "total_load_mw": obs["total_load_mw"], "converged": obs["converged"],
+               "total_gen_mw": obs["total_gen_mw"]}
         if obs["ev_state"]:
             row["ev_soc_mean"] = float(np.mean(list(obs["ev_state"]["soc"].values())))
             row["ev_p_total"] = float(np.sum(list(obs["ev_state"]["p"].values())))
