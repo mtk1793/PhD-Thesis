@@ -83,3 +83,26 @@ steps; trip/restore reproduces pre-contingency flows exactly.
 
 Verified: 22/22 tests pass; local controllers near-zero impact motivates
 CAPSM coordinated AI control architecture.
+
+## Phase 4 - System 1 CNN-LSTM reflexive controller
+
+- Implemented `capsm/agents/system1.py`: StateEncoder (160-dim feature
+  vectors from QSTS observations), CNN-LSTM model (2-layer Conv1d + LSTM
+  + attention + FC, ~250K params), System1Controller inference wrapper
+  with 12-step sliding window.
+- Implemented `capsm/agents/reward.py`: weighted reward function
+  (voltage deviation + losses + violation penalty).
+- Implemented `capsm/agents/collector.py`: trajectory collection from
+  any controller through the QSTS environment.
+- Implemented `capsm/agents/trainer.py`: behavior cloning (supervised
+  learning from baseline demos), model save/load.
+- Training: 4 episodes × 168 steps (672 total), 100 epochs, MSE loss
+  0.002 → 0.0008, training time 117 s.
+- January 2019 evaluation: violations 2823 (−24 vs NoControl, −0.84%),
+  voltage deviation 0.0285 (−0.3%), full convergence 721/721.
+- Inference: 63 ms/step Python CPU (5 ms target for OPAL-RT ONNX).
+- 13 new unit tests (35 total, all passing).
+- Model saved in `results/phase4/system1_cnnlstm.pt`.
+
+Verified: 35/35 tests pass; behavior cloning proof of concept:
+CNN-LSTM marginally outperforms local droop from 672 demo steps.
