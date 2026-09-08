@@ -8,15 +8,13 @@ import json
 import time
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from capsm.data.opsd import load_opsd
 from capsm.grid.environment import QSTSEnvironment
+from capsm.plotting import save_figure, set_style
 
 RESULTS = Path(__file__).resolve().parents[1] / "results" / "phase2"
 
@@ -34,6 +32,7 @@ def run_case(case_name: str, start: str, end: str, label: str) -> pd.DataFrame:
 
 
 def main():
+    set_style()
     RESULTS.mkdir(parents=True, exist_ok=True)
     summary = {}
 
@@ -87,7 +86,7 @@ def main():
     with open(RESULTS / "phase2_summary.json", "w") as f:
         json.dump(summary, f, indent=2)
 
-    fig, axes = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
+    fig, axes = plt.subplots(3, 1, figsize=(10, 9), sharex=True, constrained_layout=True)
     ax = axes[0]
     ax.plot(df39.index, df39["total_load_mw"], color="tab:gray", label="Total load (MW)")
     ax.set_ylabel("Load (MW)")
@@ -104,12 +103,10 @@ def main():
     ax.set_ylabel("Voltage (p.u.)")
     ax.legend(loc="upper left")
     fig.suptitle("Uncontrolled QSTS, IEEE 39-bus, real OPSD profiles (Jan 2019)")
-    fig.autofmt_xdate()
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p2_qsts_case39_jan2019.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p2_qsts_case39_jan2019")
     plt.close(fig)
 
-    fig, axes = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
+    fig, axes = plt.subplots(2, 1, figsize=(10, 6), sharex=True, constrained_layout=True)
     axes[0].plot(dftrip.index, dftrip["losses_mw"], color="tab:red")
     axes[0].axvline(pd.Timestamp("2019-01-15 12:00", tz="UTC"), color="k", ls="--", lw=1)
     axes[0].set_ylabel("Losses (MW)")
@@ -118,9 +115,7 @@ def main():
     axes[1].axhline(0.95, color="k", lw=0.5, ls="--")
     axes[1].set_ylabel("min Vm (p.u.)")
     fig.suptitle("Line 16-17 trip on real operating conditions (IEEE 39-bus)")
-    fig.autofmt_xdate()
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p2_line_trip.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p2_line_trip")
     plt.close(fig)
 
     print("[phase2] summary:")

@@ -10,9 +10,6 @@ import json
 import time
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -21,6 +18,7 @@ from capsm.agents.baselines import BASELINES, run_controller
 from capsm.data.opsd import load_opsd
 from capsm.grid.environment import QSTSEnvironment
 from capsm.grid.stability import loading_margin
+from capsm.plotting import save_figure, set_style
 
 RESULTS = Path(__file__).resolve().parents[1] / "results" / "phase3"
 
@@ -48,6 +46,7 @@ def summarise(df: pd.DataFrame, prices: pd.Series) -> dict:
 
 
 def main():
+    set_style()
     RESULTS.mkdir(parents=True, exist_ok=True)
     profiles = load_opsd(start="2019-01-01", end="2019-01-31")
     prices = profiles["price_day_ahead_eur"]
@@ -107,7 +106,7 @@ def main():
     with open(RESULTS / "phase3_summary.json", "w") as f:
         json.dump(summary, f, indent=2)
 
-    fig, axes = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
+    fig, axes = plt.subplots(3, 1, figsize=(10, 9), sharex=True, constrained_layout=True)
     for name, df in frames.items():
         axes[0].plot(df.index, df["losses_mw"], label=name, lw=0.9)
         axes[1].plot(df.index, df["voltage_deviation_pu"], label=name, lw=0.9)
@@ -118,9 +117,7 @@ def main():
     axes[2].set_ylabel("min Vm (p.u.)")
     axes[0].legend()
     fig.suptitle("Baseline controllers, IEEE 39-bus, real OPSD Jan 2019")
-    fig.autofmt_xdate()
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p3_baselines_jan2019.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p3_baselines_jan2019")
     plt.close(fig)
 
     print("[phase3] done. artifacts in results/phase3/")

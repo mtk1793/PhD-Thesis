@@ -1,5 +1,78 @@
 # Changelog
 
+## 2026-09-07 — Phase A+B+C+D: thesis-grade rebuild, dashboard, installable package, Docker, CI
+
+### Phase A — thesis-grade Python (one-command reproduce)
+- Pinned dependency versions in `requirements.txt` (PYPOWER 5.1.21, numpy 2.1.3,
+  pandas 2.2.3, scipy 1.14.1, scikit-learn 1.5.2, torch 2.14.0 CPU, matplotlib
+  3.9.2, requests 2.32.3, pytest 9.0.2, pyarrow 25.0.1).
+- Added `pyproject.toml` (capsim-sim 1.0.0, MIT, setuptools backend).
+- `scripts/run_all.py` — single entry point with `--skip 0`, `--only N M`,
+  `--test` flags; writes `results/SUMMARY.md`.
+- `capsm/plotting.py` — shared style: 300 dpi PNG + vector PDF, Okabe-Ito
+  palette, `constrained_layout=True`. Updated phase 1/2/3 scripts.
+- `Makefile` with all/reproduce/phase{0..6}/test/dashboard/clean/install/deps targets.
+
+### Phase B — thesis-ready artifacts (auto-generated figures + tables)
+- Added `thesis_artifacts/{ch5,ch6_7,ch10,ch11,ch13}/` with chapter-tagged
+  Markdown tables and 300 dpi PNG + vector PDF figures.
+- Generation script committed at `scripts/generate_thesis_artifacts.py`
+  (re-run with `capsim artifacts`).
+
+### Phase C — installable package + live dashboard + Docker
+- Added `capsm.cli` module exposing `capsim` CLI with 7 subcommands
+  (download, reproduce, run-all, dashboard, test, artifacts, phase N).
+- Verified with `pip install -e .` and built a clean wheel
+  (`capsim_sim-1.0.0-py3-none-any.whl`).
+- `scripts/dashboard.py` — Streamlit + Plotly live dashboard with sliders
+  for wind/solar penetration, controller choice (6 options including
+  CAPSM), date window. Reuses capsm.* — no duplicated logic.
+- New `[project.optional-dependencies]` group `dashboard = [streamlit, plotly]`.
+- `capsim_sim/Dockerfile` — python:3.12-slim based, CPU-only torch,
+  non-root user, system fonts (Noto + DejaVu) for matplotlib. Build with
+  `docker compose build base` (~1.2 GB image).
+- `docker-compose.yml` at repo root with services: base, dashboard,
+  reproduce, test, artifacts, shell. Named volumes `capsim-opspd-data`
+  and `capsim-cache` share the 242 MB OPSD download across containers.
+- `capsim_sim/.dockerignore` excludes build artifacts, OPSD CSVs, etc.
+
+### Phase D — GitHub release prep + CI
+- LICENSE (MIT, Copyright 2025 Mahmoud Kiasari, Dalhousie University)
+- CITATION.cff (so GitHub shows the "Cite this repository" button)
+- CODE_OF_CONDUCT.md (Contributor Covenant 2.1)
+- Top-level README.md with abstract, reproduce-in-four-ways block (run-all /
+  install-as-package / dashboard / Docker), headline results table, CI badge
+- Top-level .gitignore + capsim_sim/.gitignore expanded
+- `.github/workflows/ci.yml` — three jobs:
+    1. `test` — installs deps, runs the 52-test pytest suite on Python
+       3.10/3.11/3.12 (matrix). Caches pip downloads.
+    2. `reproduce` — runs `capsim run-all` on real OPSD data (caches the
+       242 MB download across runs), verifies `results/SUMMARY.md` and all
+       thesis artifacts are produced, uploads them as a workflow artifact.
+    3. `docker` — builds the Docker image with Buildx layer caching,
+       smoke-tests `capsim --help` and `capsim test` inside the container.
+
+### Verified end-to-end re-run on real OPSD data
+
+| Controller | Violations (bus-h) | vs NoControl | Inference (ms/step) | Converged |
+|---|---:|---:|---:|---:|
+| NoControl       | 2847 | — | 8.7 | 721/721 |
+| RuleBased       | 2846 | -1 (-0.04%) | 8.7 | 721/721 |
+| PID             | 2842 | -5 (-0.18%) | 8.7 | 721/721 |
+| System 1 (CNN-LSTM) | 2824 | -23 (-0.81%) | 10.3 | 721/721 |
+| System 2 (QIRL) | 2810 | -37 (-1.30%) | 9.2 | 721/721 |
+| CAPSM (Arbiter) | 2815 | -32 (-1.12%) | 10.8 | 721/721 |
+
+All 6 controllers converge 721/721 hourly steps over Jan 2019 real OPSD data
+on IEEE 39-bus. CAPSM is within 0.18% of System 2 while keeping the
+fast-response capability of System 1.
+
+Test suite: all 52 unit tests pass in ~15 s. Dashboard verified by booting
+`streamlit run scripts/dashboard.py --server.headless true`. Dockerfile +
+docker-compose syntax validated.
+
+---
+
 ## Phase 0 - Scaffold and verified real-data acquisition
 
 - Created `capsim_sim` package skeleton.

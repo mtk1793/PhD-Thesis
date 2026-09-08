@@ -3,14 +3,12 @@
 import json
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
 from capsm.data.disaggregate import RENEWABLE_SITES, penetration_summary
 from capsm.data.opsd import SPLITS, PRICE_WINDOW, apply_gap_policy, build_cache, load_opsd, mine_ramp_events
+from capsm.plotting import save_figure, set_style
 
 RESULTS = Path(__file__).resolve().parents[1] / "results" / "phase1"
 TESTS_DATA = Path(__file__).resolve().parents[1] / "tests" / "data"
@@ -18,6 +16,7 @@ DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
 
 def main():
+    set_style()
     RESULTS.mkdir(parents=True, exist_ok=True)
     TESTS_DATA.mkdir(parents=True, exist_ok=True)
 
@@ -60,7 +59,7 @@ def main():
     sample.to_csv(TESTS_DATA / "sample_opsd_week.csv")
     print(f"[phase1] test sample written: {len(sample)} rows")
 
-    fig, axes = plt.subplots(2, 1, figsize=(10, 6), sharex=False)
+    fig, axes = plt.subplots(2, 1, figsize=(10, 6), sharex=False, constrained_layout=True)
     winter = df.loc["2016-01-04":"2016-01-11", "load_actual_mw"]
     summer = df.loc["2016-07-04":"2016-07-11", "load_actual_mw"]
     axes[0].plot(winter.index, winter, color="tab:blue")
@@ -70,8 +69,7 @@ def main():
     axes[1].set_ylabel("MW")
     axes[1].set_title("Summer week (Jul 2016)")
     fig.autofmt_xdate()
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p1_load_weeks.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p1_load_weeks")
     plt.close(fig)
 
     df["month"] = df.index.month
@@ -79,15 +77,14 @@ def main():
               6: "summer", 7: "summer", 8: "summer", 9: "autumn", 10: "autumn", 11: "autumn"}
     df["season"] = df["month"].map(season)
     diurnal = df.groupby([df["season"], df.index.hour])["load_actual_mw"].mean().unstack(0)
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
     for col in diurnal.columns:
         ax.plot(diurnal.index, diurnal[col], label=col)
     ax.set_xlabel("Hour of day (UTC)")
     ax.set_ylabel("Mean load (MW)")
     ax.set_title("Mean diurnal load profile by season (real OPSD data, 2015-2020)")
     ax.legend()
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p1_diurnal_seasonal.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p1_diurnal_seasonal")
     plt.close(fig)
 
     events = mine_ramp_events(df)
@@ -101,29 +98,27 @@ def main():
     t_start = t_end - pd.Timedelta(hours=36)
     window = df.loc[t_start:t_end]
     re_total = window["wind_onshore_mw"].fillna(0) + window["wind_offshore_mw"].fillna(0) + window["solar_mw"].fillna(0)
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(9, 5), constrained_layout=True)
     ax.plot(window.index, re_total, label="Wind + solar", color="tab:green")
     ax2 = ax.twinx()
     ax2.plot(window.index, window["load_actual_mw"], label="Load", color="tab:gray", alpha=0.6)
     ax.set_ylabel("Renewable generation (MW)")
     ax2.set_ylabel("Load (MW)")
     ax.set_title(f"Largest 3-h renewable ramp in the dataset (ends {t_end})")
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p1_top_ramp.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p1_top_ramp")
     plt.close(fig)
 
     year = df.loc["2019"]
     wind19 = (year["wind_onshore_mw"] + year["wind_offshore_mw"]).sort_values(ascending=False).reset_index(drop=True)
     solar19 = year["solar_mw"].sort_values(ascending=False).reset_index(drop=True)
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
     ax.plot(100 * wind19.index / len(wind19), wind19, label="Wind 2019")
     ax.plot(100 * solar19.index / len(solar19), solar19, label="Solar 2019")
     ax.set_xlabel("Exceedance (%)")
     ax.set_ylabel("Generation (MW)")
     ax.set_title("Renewable duration curves (real OPSD 2019)")
     ax.legend()
-    fig.tight_layout()
-    fig.savefig(RESULTS / "fig_p1_duration_curves.png", dpi=150)
+    save_figure(fig, RESULTS / "fig_p1_duration_curves")
     plt.close(fig)
 
     rows = []
