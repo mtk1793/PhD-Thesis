@@ -1,0 +1,22 @@
+{
+  "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+  "method": "data-only policy vs physics-informed policy + differentiable safety projection on real OPSD operating points",
+  "evaluation_cycles": 9000,
+  "training_samples": 360,
+  "data_only_violations_per_10000": 2942,
+  "pinn_violations_per_10000": 12,
+  "pinn_compliance_percent": 99.87777777777778,
+  "violation_reduction_percent": 99.59211420802175,
+  "data_only_action_mse": 0.002152517903596163,
+  "pinn_action_mse": 0.013906979002058506,
+  "training_seconds": {
+    "data_only": 0.3900619989999541,
+    "pinn": 0.7419049600000562
+  },
+  "target_reference_pdf": {
+    "before_violations_per_10000": 3130,
+    "after": 11,
+    "compliance_percent": 99.97
+  },
+  "note": "The projection enforces the thesis hard safety envelope using the same differentiable surrogate used in the PINN penalty."
+}

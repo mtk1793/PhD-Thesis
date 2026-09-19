@@ -1,0 +1,346 @@
+{
+  "system1": {
+    "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+    "full_opsd": false,
+    "method": "real OPSD operating points + reproducible injected PMU fault signatures",
+    "classes": [
+      "normal",
+      "low_impedance",
+      "high_impedance",
+      "cyber_fdi",
+      "voltage_sag",
+      "frequency_deviation",
+      "load_transient",
+      "load_shedding"
+    ],
+    "accuracy_all_8_classes": 0.9806818181818182,
+    "mean_fault_accuracy_7_classes": 0.987012987012987,
+    "per_class_accuracy": {
+      "normal": 0.9363636363636364,
+      "low_impedance": 1.0,
+      "high_impedance": 1.0,
+      "cyber_fdi": 1.0,
+      "voltage_sag": 0.9090909090909091,
+      "frequency_deviation": 1.0,
+      "load_transient": 1.0,
+      "load_shedding": 1.0
+    },
+    "mean_detection_latency_ms": 8.159491725827381,
+    "per_fault_latency_ms": {
+      "low_impedance": 4.0344827586206895,
+      "high_impedance": 9.428571428571429,
+      "cyber_fdi": 13.037037037037036,
+      "voltage_sag": 10.76056338028169,
+      "frequency_deviation": 7.0588235294117645,
+      "load_transient": 5.764705882352941,
+      "load_shedding": 7.032258064516129
+    },
+    "parameters": 40073,
+    "train_seconds": 4.719452466999883,
+    "split_days": {
+      "train": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "validation": [
+        6
+      ],
+      "test": [
+        7,
+        8
+      ]
+    },
+    "target_reference_pdf": {
+      "mean_fault_accuracy": 0.9678,
+      "mean_detection_latency_ms": 8.6
+    },
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.9799966188577505,
+        "val_accuracy": 0.325
+      },
+      {
+        "epoch": 2,
+        "loss": 1.4438819408416748,
+        "val_accuracy": 0.6089285714285714
+      },
+      {
+        "epoch": 3,
+        "loss": 0.8355171455786778,
+        "val_accuracy": 0.9607142857142857
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4376598915228477,
+        "val_accuracy": 0.9839285714285714
+      },
+      {
+        "epoch": 5,
+        "loss": 0.21739474351589497,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 6,
+        "loss": 0.14865611241413998,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 7,
+        "loss": 0.12999498821221867,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 8,
+        "loss": 0.12340989949611517,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 9,
+        "loss": 0.11899279310153081,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 10,
+        "loss": 0.11467224978483641,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 11,
+        "loss": 0.1121483557499372,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 12,
+        "loss": 0.10936675805311936,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 13,
+        "loss": 0.10751807128007596,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 14,
+        "loss": 0.105835594695348,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 15,
+        "loss": 0.10505353510379792,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 16,
+        "loss": 0.10462710009171412,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.10302938452133766,
+        "val_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.10294830111356881,
+        "val_accuracy": 1.0
+      }
+    ]
+  },
+  "system2": {
+    "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+    "method": "QIRL vs DQN on identical real-OPSD-driven control surrogate",
+    "episodes_run": 3000,
+    "qirl": {
+      "convergence_episode": 1135,
+      "training_seconds": 8.892476722000083,
+      "test_reward_mean": -30.819929093122482,
+      "test_reward_std": 0.9928906969669462
+    },
+    "dqn": {
+      "convergence_episode": 2383,
+      "training_seconds": 8.708126497999956,
+      "test_reward_mean": -29.530142591148614,
+      "test_reward_std": 0.782827306854
+    },
+    "qirl_faster_percent": 52.37096097356274,
+    "target_reference_pdf": {
+      "qirl_episodes": 1198,
+      "dqn_episodes": 2847,
+      "qirl_faster_percent": 57.9,
+      "qirl_training_h": 2.1,
+      "dqn_training_h": 4.2
+    },
+    "note": "Wall-clock training time is hardware-dependent; episode convergence is the portable comparison.",
+    "reward_history_tail": {
+      "qirl": [
+        -31.510123431682587,
+        -32.299629747867584,
+        -33.302793860435486,
+        -35.33535796403885,
+        -31.683425724506378,
+        -30.837645828723907,
+        -37.744494915008545,
+        -31.46819430589676,
+        -40.29505157470703,
+        -30.810418128967285,
+        -40.40686273574829,
+        -33.72079294919968,
+        -34.556253373622894,
+        -29.373718738555908,
+        -34.1404527425766,
+        -28.91016322374344,
+        -32.44694364070892,
+        -32.911091685295105,
+        -30.843494653701782,
+        -33.13326072692871,
+        -29.951744318008423,
+        -33.177796959877014,
+        -30.175782084465027,
+        -33.32050001621246,
+        -29.6427720785141
+      ],
+      "dqn": [
+        -35.61794853210449,
+        -31.998398900032043,
+        -37.776123046875,
+        -33.16167992353439,
+        -33.7056086063385,
+        -30.546702980995178,
+        -28.952841639518738,
+        -29.69982123374939,
+        -32.8940971493721,
+        -29.511337220668793,
+        -33.115148305892944,
+        -33.03003489971161,
+        -31.026738047599792,
+        -30.40264105796814,
+        -33.21364039182663,
+        -40.25665336847305,
+        -28.434769332408905,
+        -29.453832805156708,
+        -37.19550824165344,
+        -29.79533964395523,
+        -31.04138708114624,
+        -34.091960072517395,
+        -34.44128108024597,
+        -36.662001848220825,
+        -29.283366799354553
+      ]
+    }
+  },
+  "pinn": {
+    "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+    "method": "data-only policy vs physics-informed policy + differentiable safety projection on real OPSD operating points",
+    "evaluation_cycles": 9000,
+    "training_samples": 360,
+    "data_only_violations_per_10000": 2942,
+    "pinn_violations_per_10000": 12,
+    "pinn_compliance_percent": 99.87777777777778,
+    "violation_reduction_percent": 99.59211420802175,
+    "data_only_action_mse": 0.002152517903596163,
+    "pinn_action_mse": 0.013906979002058506,
+    "training_seconds": {
+      "data_only": 0.3900619989999541,
+      "pinn": 0.7419049600000562
+    },
+    "target_reference_pdf": {
+      "before_violations_per_10000": 3130,
+      "after": 11,
+      "compliance_percent": 99.97
+    },
+    "note": "The projection enforces the thesis hard safety envelope using the same differentiable surrogate used in the PINN penalty."
+  },
+  "hmarl": {
+    "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+    "method": "hierarchical local policies + confidence-weighted consensus on real OPSD operating states",
+    "results": [
+      {
+        "system": "IEEE-9",
+        "buses": 9,
+        "agents": 3,
+        "accuracy_percent": 91.86666666666666,
+        "mean_action_error": 0.03453405762419035,
+        "inference_ms": 0.052599651999723086,
+        "model_plus_replay_memory_mb": 1.8533744812011719
+      },
+      {
+        "system": "IEEE-14",
+        "buses": 14,
+        "agents": 6,
+        "accuracy_percent": 92.66666666666667,
+        "mean_action_error": 0.034358149672696486,
+        "inference_ms": 0.08719591333344094,
+        "model_plus_replay_memory_mb": 3.6911239624023438
+      },
+      {
+        "system": "IEEE-39",
+        "buses": 39,
+        "agents": 8,
+        "accuracy_percent": 92.53333333333333,
+        "mean_action_error": 0.034037494683156234,
+        "inference_ms": 0.11172771066685527,
+        "model_plus_replay_memory_mb": 4.916290283203125
+      },
+      {
+        "system": "IEEE-118",
+        "buses": 118,
+        "agents": 25,
+        "accuracy_percent": 88.66666666666667,
+        "mean_action_error": 0.03784245410026668,
+        "inference_ms": 0.27537535866667895,
+        "model_plus_replay_memory_mb": 15.330204010009766
+      },
+      {
+        "system": "IEEE-300-A",
+        "buses": 300,
+        "agents": 45,
+        "accuracy_percent": 85.73333333333333,
+        "mean_action_error": 0.040806611692575503,
+        "inference_ms": 0.46901552666652907,
+        "model_plus_replay_memory_mb": 27.581867218017578
+      },
+      {
+        "system": "IEEE-300-B",
+        "buses": 300,
+        "agents": 87,
+        "accuracy_percent": 83.06666666666666,
+        "mean_action_error": 0.04365683357224513,
+        "inference_ms": 0.876226398666707,
+        "model_plus_replay_memory_mb": 53.310359954833984
+      }
+    ],
+    "target_reference_pdf": {
+      "IEEE39": {
+        "agents": 8,
+        "accuracy_percent": 91.2,
+        "inference_ms": 15.4
+      },
+      "accuracy_trend": [
+        93.4,
+        92.8,
+        91.2,
+        89.1,
+        88.1
+      ],
+      "latency_ms_examples": [
+        2.3,
+        7.1,
+        15.4,
+        45.7,
+        83.0
+      ]
+    },
+    "note": "Latency is measured on the current CPU and is not forced to the defence-slide hardware-dependent values."
+  },
+  "provenance": {
+    "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+    "full_opsd": false,
+    "rows": 192,
+    "statement": "All exogenous operating points come from measured OPSD data. Faults/cyber events are reproducibly injected because the repository contains no measured labelled PMU fault corpus.",
+    "hil_excluded": true
+  }
+}

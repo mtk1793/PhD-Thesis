@@ -1,0 +1,82 @@
+{
+  "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+  "method": "hierarchical local policies + confidence-weighted consensus on real OPSD operating states",
+  "results": [
+    {
+      "system": "IEEE-9",
+      "buses": 9,
+      "agents": 3,
+      "accuracy_percent": 91.86666666666666,
+      "mean_action_error": 0.03453405762419035,
+      "inference_ms": 0.052599651999723086,
+      "model_plus_replay_memory_mb": 1.8533744812011719
+    },
+    {
+      "system": "IEEE-14",
+      "buses": 14,
+      "agents": 6,
+      "accuracy_percent": 92.66666666666667,
+      "mean_action_error": 0.034358149672696486,
+      "inference_ms": 0.08719591333344094,
+      "model_plus_replay_memory_mb": 3.6911239624023438
+    },
+    {
+      "system": "IEEE-39",
+      "buses": 39,
+      "agents": 8,
+      "accuracy_percent": 92.53333333333333,
+      "mean_action_error": 0.034037494683156234,
+      "inference_ms": 0.11172771066685527,
+      "model_plus_replay_memory_mb": 4.916290283203125
+    },
+    {
+      "system": "IEEE-118",
+      "buses": 118,
+      "agents": 25,
+      "accuracy_percent": 88.66666666666667,
+      "mean_action_error": 0.03784245410026668,
+      "inference_ms": 0.27537535866667895,
+      "model_plus_replay_memory_mb": 15.330204010009766
+    },
+    {
+      "system": "IEEE-300-A",
+      "buses": 300,
+      "agents": 45,
+      "accuracy_percent": 85.73333333333333,
+      "mean_action_error": 0.040806611692575503,
+      "inference_ms": 0.46901552666652907,
+      "model_plus_replay_memory_mb": 27.581867218017578
+    },
+    {
+      "system": "IEEE-300-B",
+      "buses": 300,
+      "agents": 87,
+      "accuracy_percent": 83.06666666666666,
+      "mean_action_error": 0.04365683357224513,
+      "inference_ms": 0.876226398666707,
+      "model_plus_replay_memory_mb": 53.310359954833984
+    }
+  ],
+  "target_reference_pdf": {
+    "IEEE39": {
+      "agents": 8,
+      "accuracy_percent": 91.2,
+      "inference_ms": 15.4
+    },
+    "accuracy_trend": [
+      93.4,
+      92.8,
+      91.2,
+      89.1,
+      88.1
+    ],
+    "latency_ms_examples": [
+      2.3,
+      7.1,
+      15.4,
+      45.7,
+      83.0
+    ]
+  },
+  "note": "Latency is measured on the current CPU and is not forced to the defence-slide hardware-dependent values."
+}

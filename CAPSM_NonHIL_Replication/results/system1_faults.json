@@ -1,0 +1,151 @@
+{
+  "data_source": "/mnt/data/capsm_replication/data/sample_opsd_week.csv",
+  "full_opsd": false,
+  "method": "real OPSD operating points + reproducible injected PMU fault signatures",
+  "classes": [
+    "normal",
+    "low_impedance",
+    "high_impedance",
+    "cyber_fdi",
+    "voltage_sag",
+    "frequency_deviation",
+    "load_transient",
+    "load_shedding"
+  ],
+  "accuracy_all_8_classes": 0.9806818181818182,
+  "mean_fault_accuracy_7_classes": 0.987012987012987,
+  "per_class_accuracy": {
+    "normal": 0.9363636363636364,
+    "low_impedance": 1.0,
+    "high_impedance": 1.0,
+    "cyber_fdi": 1.0,
+    "voltage_sag": 0.9090909090909091,
+    "frequency_deviation": 1.0,
+    "load_transient": 1.0,
+    "load_shedding": 1.0
+  },
+  "mean_detection_latency_ms": 8.159491725827381,
+  "per_fault_latency_ms": {
+    "low_impedance": 4.0344827586206895,
+    "high_impedance": 9.428571428571429,
+    "cyber_fdi": 13.037037037037036,
+    "voltage_sag": 10.76056338028169,
+    "frequency_deviation": 7.0588235294117645,
+    "load_transient": 5.764705882352941,
+    "load_shedding": 7.032258064516129
+  },
+  "parameters": 40073,
+  "train_seconds": 4.719452466999883,
+  "split_days": {
+    "train": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "validation": [
+      6
+    ],
+    "test": [
+      7,
+      8
+    ]
+  },
+  "target_reference_pdf": {
+    "mean_fault_accuracy": 0.9678,
+    "mean_detection_latency_ms": 8.6
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 1.9799966188577505,
+      "val_accuracy": 0.325
+    },
+    {
+      "epoch": 2,
+      "loss": 1.4438819408416748,
+      "val_accuracy": 0.6089285714285714
+    },
+    {
+      "epoch": 3,
+      "loss": 0.8355171455786778,
+      "val_accuracy": 0.9607142857142857
+    },
+    {
+      "epoch": 4,
+      "loss": 0.4376598915228477,
+      "val_accuracy": 0.9839285714285714
+    },
+    {
+      "epoch": 5,
+      "loss": 0.21739474351589497,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 6,
+      "loss": 0.14865611241413998,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 7,
+      "loss": 0.12999498821221867,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 8,
+      "loss": 0.12340989949611517,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 9,
+      "loss": 0.11899279310153081,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 10,
+      "loss": 0.11467224978483641,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 11,
+      "loss": 0.1121483557499372,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 12,
+      "loss": 0.10936675805311936,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 13,
+      "loss": 0.10751807128007596,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 14,
+      "loss": 0.105835594695348,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 15,
+      "loss": 0.10505353510379792,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 16,
+      "loss": 0.10462710009171412,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 17,
+      "loss": 0.10302938452133766,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 18,
+      "loss": 0.10294830111356881,
+      "val_accuracy": 1.0
+    }
+  ]
+}
