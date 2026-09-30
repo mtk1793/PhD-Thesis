@@ -1,0 +1,35 @@
+claim_id,location,value,units,evidence_class,source_file,provenance_status,action_taken_in_revision
+OFF-001,abstract/ch03/ch04/ch05/ch11/ch13,2813,bus-h,E1,results/phase6 (Stage-1),SUPERSEDED,"labelled superseded; final value from phase6_v2 rerun (SSOT)"
+OFF-002,ch03/ch04/ch05/ch11,2810,bus-h,E1,results/phase5 (Stage-1),SUPERSEDED,"labelled superseded; final value from phase5_v2 rerun"
+OFF-003,ch11,2822,bus-h,E1,results/phase4 (Stage-1),SUPERSEDED,"labelled superseded; System 1 retrained without 2019 leakage (phase4_v2)"
+OFF-004,abstract/ch01/ch05/ch11,2847,bus-h,E1,results/phase3,VERIFY_RERUN,"NoControl baseline rerun with revised metrics; severity metric added"
+OFF-005,ch11,-1.20 / -1.30 / -0.88,percent,E1,Stage-1 deltas,SUPERSEDED,"relative deltas recomputed after rerun"
+OFF-006,ch11,46.19 / 46.20 / 46.11,MW,E1,results/phase5/phase6,VERIFY_RERUN,"losses recomputed after rerun"
+OFF-007,ch11,36.5,ms,E1,results/phase6,VERIFY_RERUN,"CAPSM step time recomputed (counterfactual evaluation changes cost)"
+OFF-008,ch11,63.0 / 32.0,ms,E1,results/phase4/phase6,VERIFY_RERUN,"System 1 step time recomputed"
+OFF-009,ch11,21.1 / 27.6,ms,E1,results/phase5/phase6,VERIFY_RERUN,"System 2 step time recomputed; evaluator A/B timing reported separately"
+OFF-010,ch04,137418,parameters,E1,code derivation,FROZEN,"kept; ~250K labelled as stored training-state overhead in ch04/ch06/ch13"
+OFF-011,ch11,100 percent convergence,rate,E1,results/phase2-6,FROZEN,"recheck on rerun"
+OFF-012,ch11/ch13,100 percent on IEEE 9/14/39/118,rate,E1,results/phase2,RELABELLED,"claim reworded to multi-system pipeline portability (not controller generalisation / transferable knowledge)"
+OFF-013,ch01/ch05,32.7,percent,E4,framework specification,LABELLED,"kept explicitly as design target; never presented as measured"
+OFF-014,ch01,42,percent,E4,framework specification,LABELLED,"kept explicitly as design target"
+OFF-015,ch03,58-59,percent,E4,framework specification,LABELLED,"kept explicitly as design target"
+OFF-016,ch01,99.9 percent constraint compliance,percent,E4,framework specification,REMOVED,"replaced by by-construction admissibility envelope (no percentage claim)"
+OFF-017,ch12/ch13,12.4 / 378.6 / 83.7 / 1.7,economic,E4,economic design study IEEE-118,LABELLED,"marked E4; stated as projections, not validated performance"
+OFF-018,ch02,171.625,MEUR,E1,Stage-1 price replay,FROZEN,"labelled Stage-1 measured over replayed prices"
+OFF-019,new,violation_severity_pu2,p.u.^2,E1,capsm/grid/metrics.py (new),ADDED,"Phase-P severity metric added to pipeline and every results table"
+OFF-020,new,p95_voltage_dev_pu,p.u.,E1,capsm/grid/metrics.py (new),ADDED,"Phase-P robust deviation metric added"
+HIL-001,ch11,0.31,ms,E2,HIL campaign,PENDING_PROVENANCE,"locate raw log; else downgrade to representative result (ledger 04)"
+HIL-002,ch11,3.9,ms,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-003,ch11,7.4,ms,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-004,ch11,41.0,ms,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-005,ch11,8.6,ms,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-006,ch11,86.7,percent,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-007,ch11,320,ms,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-008,ch11,45,MW/s,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-009,ch11,0.011,Hz,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-010,ch11,93.8-98.2,percent,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+HIL-011,ch11,41-55,ms,E2,HIL campaign,PENDING_PROVENANCE,see ledger 04
+DES-001,ch03,52 tests,count,E1,tests suite,UPDATED,"P0 regression tests added; suite count updated at next release"
+DES-002,methodology,10 seeds,min,E1,phase7 script,ADDED,"multi-seed requirement now tooling-supported (phase7_ablations.py)"
+DES-003,methodology,block bootstrap,method,E1,phase8 script,ADDED,"autocorrelation-aware statistics now tooling-supported"

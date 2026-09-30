@@ -1,76 +1,138 @@
-"""Phase 5 — System 2 QIRL evaluation.
+"""Phase 5 (v2) — System 2 QIRL evaluation with candidate-dependent evaluators.
 
-Evaluates the Quantum-Inspired RL controller against baselines on
-the January 2019 IEEE 39-bus benchmark.
+Rebuilt per master plan §5 (Phase B) and §11 (Phase H, Option 2):
+
+- Candidates are scored on the COUNTERFACTUAL network state (Evaluator A:
+  exact AC power flow per candidate; Evaluator B: sensitivity surrogate).
+- Selection is honestly single-step (no multi-step planning claims).
+- Reports evaluator timing separately so the 50 ms real-time question is
+  answered with measured numbers.
+
+Outputs are versioned to ``results/phase5_v2/``.
+
+Usage:
+  python scripts/phase5_system2.py [--evaluator surrogate] [--seeds 42]
+      [--candidates 32] [--test-start 2019-01-01 --test-end 2019-01-31]
 """
 
+import argparse
 import json
 import time
 from pathlib import Path
 
+import numpy as np
+
+from capsm.agents.baselines import (
+    NoControl, PIDVoltage, RuleBasedVoltage, run_controller,
+)
 from capsm.agents.system2 import QIRLController
-from capsm.agents.baselines import NoControl, RuleBasedVoltage, run_controller
+from capsm.agents.trainer import TEST_YEARS
 from capsm.data.opsd import load_opsd
 from capsm.grid.environment import QSTSEnvironment
 
-RESULTS = Path("results/phase5")
+RESULTS = Path("results/phase5_v2")
 RESULTS.mkdir(parents=True, exist_ok=True)
 
 
+def parse_args():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--evaluator", choices=["exact", "surrogate"], default="surrogate")
+    p.add_argument("--seeds", type=int, nargs="+", default=[42, 43, 44, 45, 46,
+                                                           47, 48, 49, 50, 51])
+    p.add_argument("--candidates", type=int, default=32)
+    p.add_argument("--refresh-every", type=int, default=24)
+    p.add_argument("--test-start", type=str, default="2019-01-01")
+    p.add_argument("--test-end", type=str, default="2019-01-31")
+    p.add_argument("--beta", type=float, default=5.0)
+    p.add_argument("--tunnel-rate", type=float, default=0.1)
+    return p.parse_args()
+
+
+def _summarise(df) -> dict:
+    return {
+        "mean_losses_mw": round(float(df["losses_mw"].mean()), 2),
+        "mean_voltage_dev_pu": round(float(df["voltage_deviation_pu"].mean()), 4),
+        "p95_voltage_dev_pu": round(float(df["p95_voltage_dev_pu"].mean()), 4),
+        "voltage_violation_hours": int(df["n_voltage_violations"].sum()),
+        "violation_severity_pu2": round(float(df["violation_severity_pu2"].sum()), 5),
+        "min_vm_min": round(float(df["vm_min"].min()), 4),
+        "converged": int(df["converged"].sum()),
+        "n_steps": len(df),
+    }
+
+
 def main():
-    print("[phase5] loading OPSD profiles ...")
-    profiles = load_opsd(start="2019-01-01", end="2019-01-31")
+    args = parse_args()
+    print(f"[phase5-v2] evaluator={args.evaluator} candidates={args.candidates} "
+          f"seeds={args.seeds}")
+    profiles = load_opsd(start=args.test_start, end=args.test_end)
 
-    print("[phase5] evaluating QIRL vs baselines on January 2019 ...")
-    env1 = QSTSEnvironment("case39", profiles)
-    ctrl = QIRLController(n_candidates=32, seed=42)
-    t0 = time.time()
-    df_qirl = run_controller(env1, ctrl, start="2019-01-01")
-    dt_qirl = time.time() - t0
+    # ── baselines (deterministic; run once) ──────────────────────────
+    baselines = {}
+    for label, cls in [("no_control", NoControl),
+                       ("rule_based", RuleBasedVoltage),
+                       ("pid", PIDVoltage)]:
+        env_b = QSTSEnvironment("case39", profiles)
+        df_b = run_controller(env_b, cls(), start=args.test_start)
+        baselines[label] = _summarise(df_b)
+        print(f"[phase5-v2] baseline {label}: dev={baselines[label]['mean_voltage_dev_pu']} "
+              f"viol={baselines[label]['voltage_violation_hours']} h")
 
-    env2 = QSTSEnvironment("case39", profiles)
-    t0 = time.time()
-    df_none = run_controller(env2, NoControl(), start="2019-01-01")
-    dt_none = time.time() - t0
+    # ── QIRL per seed ────────────────────────────────────────────────
+    per_seed = []
+    for seed in args.seeds:
+        env = QSTSEnvironment("case39", profiles)
+        ctrl = QIRLController(
+            env=env,
+            n_candidates=args.candidates,
+            beta=args.beta,
+            tunnel_rate=args.tunnel_rate,
+            seed=seed,
+            evaluator=args.evaluator,
+            refresh_every=args.refresh_every,
+        )
+        t0 = time.perf_counter()
+        df_q = run_controller(env, ctrl, start=args.test_start)
+        wall = time.perf_counter() - t0
+        s = _summarise(df_q)
+        s.update({
+            "seed": seed,
+            "evaluator_wall_ms_per_step": round(wall / max(len(df_q), 1) * 1000.0, 3),
+            "evaluator_power_flows_total": ctrl.evaluator_power_flows,
+        })
+        per_seed.append(s)
+        print(f"[phase5-v2] qirl seed={seed}: dev={s['mean_voltage_dev_pu']} "
+              f"viol={s['voltage_violation_hours']} h "
+              f"sev={s['violation_severity_pu2']} "
+              f"wall={s['evaluator_wall_ms_per_step']} ms/step "
+              f"PFs={s['evaluator_power_flows_total']}")
 
-    env3 = QSTSEnvironment("case39", profiles)
-    t0 = time.time()
-    df_rule = run_controller(env3, RuleBasedVoltage(), start="2019-01-01")
-    dt_rule = time.time() - t0
+    def agg(key):
+        vals = [s[key] for s in per_seed]
+        return {"mean": float(np.mean(vals)), "std": float(np.std(vals)),
+                "median": float(np.median(vals)),
+                "iqr": float(np.percentile(vals, 75) - np.percentile(vals, 25)),
+                "n_seeds": len(vals)}
 
-    summary = {}
-    for label, df in [("qirl", df_qirl), ("no_control", df_none), ("rule_based", df_rule)]:
-        summary[label] = {
-            "mean_losses_mw": round(float(df["losses_mw"].mean()), 2),
-            "max_losses_mw": round(float(df["losses_mw"].max()), 2),
-            "mean_voltage_dev_pu": round(float(df["voltage_deviation_pu"].mean()), 4),
-            "voltage_violation_hours": int(df["n_voltage_violations"].sum()),
-            "mean_vm_min": round(float(df["vm_min"].mean()), 4),
-            "min_vm_min": round(float(df["vm_min"].min()), 4),
-            "converged": int(df["converged"].sum()),
-            "n_steps": len(df),
-        }
-
-    print("[phase5] results:")
-    for label, s in summary.items():
-        print(f"  {label}: losses={s['mean_losses_mw']} MW  "
-              f"dev={s['mean_voltage_dev_pu']}  "
-              f"viol={s['voltage_violation_hours']} h  "
-              f"conv={s['converged']}/{s['n_steps']}")
-
-    with open(RESULTS / "phase5_summary.json", "w") as f:
+    summary = {
+        "config": vars(args),
+        "test_window": [args.test_start, args.test_end],
+        "scope": "single-step candidate optimisation (planning reserved for future work)",
+        "per_seed": per_seed,
+        "qirl_aggregates": {
+            "mean_voltage_dev_pu": agg("mean_voltage_dev_pu"),
+            "voltage_violation_hours": agg("voltage_violation_hours"),
+            "violation_severity_pu2": agg("violation_severity_pu2"),
+            "mean_losses_mw": agg("mean_losses_mw"),
+            "evaluator_wall_ms_per_step": agg("evaluator_wall_ms_per_step"),
+        },
+        "baselines": baselines,
+        "note": "All values are E1 (offline measured) once produced by this script.",
+    }
+    with open(RESULTS / "phase5_v2_summary.json", "w") as f:
         json.dump(summary, f, indent=2)
-
-    q = summary["qirl"]
-    n = summary["no_control"]
-    r = summary["rule_based"]
-    print(f"\n[phase5] QIRL vs NoControl: dev {q['mean_voltage_dev_pu'] - n['mean_voltage_dev_pu']:+.4f} p.u.  "
-          f"viol {q['voltage_violation_hours'] - n['voltage_violation_hours']:+d} h")
-    print(f"[phase5] QIRL vs RuleBased: dev {q['mean_voltage_dev_pu'] - r['mean_voltage_dev_pu']:+.4f} p.u.  "
-          f"viol {q['voltage_violation_hours'] - r['voltage_violation_hours']:+d} h")
-    print(f"[phase5] QIRL time: {dt_qirl:.1f}s for {len(df_qirl)} steps "
-          f"({dt_qirl/len(df_qirl)*1000:.1f} ms/step)")
-    print("[phase5] done.")
+    print(f"[phase5-v2] summary written to {RESULTS / 'phase5_v2_summary.json'}")
+    print("[phase5-v2] done.")
 
 
 if __name__ == "__main__":

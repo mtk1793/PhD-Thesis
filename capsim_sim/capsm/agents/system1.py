@@ -5,6 +5,24 @@ Architecture (thesis Section 4.2, Figure 6.1):
   → attention → FC → continuous action outputs for FACTS + EV dispatch.
 
 Inference budget: <5 ms per step (verified in Phase 4 tests).
+
+Temporal-state handling (master plan §8, Phase E):
+  Training and inference MUST share one recurrence convention. The
+  controller therefore exposes an explicit ``temporal_mode``:
+
+    ``window_reset``         (S1-A, DEFAULT) 12-step sliding window;
+        LSTM hidden state reset on every call. Matches windowed
+        behaviour-cloning training (``trainer.build_window_dataset``).
+    ``streaming_persistent`` (S1-B) one-step streaming input;
+        persistent LSTM hidden state carried between calls.
+    ``window_persistent``    (S1-C, legacy) 12-step window + persistent
+        hidden state. Kept ONLY for the S1-A/B/C ablation; this mixes
+        conventions and is not used for headline results.
+
+Reserved action dimension (master plan §6, Phase C):
+  Action index 5 (UPFC series-Q) is physically inactive in the Stage-1
+  device models. It is forced to 0.0 in inference post-processing so it
+  can never influence the environment or the action-effort penalty.
 """
 
 from __future__ import annotations
@@ -152,7 +170,18 @@ class CNNLSTM(nn.Module):
 
 
 class System1Controller:
-    """Inference wrapper: observation → FACTS controls dict + EV dispatch."""
+    """Inference wrapper: observation → FACTS controls dict + EV dispatch.
+
+    ``temporal_mode`` selects the single recurrence convention used by
+    BOTH training and inference (master plan §8):
+
+    - ``window_reset`` (S1-A, default): 12-step sliding window, LSTM
+      hidden state reset every call.
+    - ``streaming_persistent`` (S1-B): one-step input, persistent hidden
+      state across calls.
+    - ``window_persistent`` (S1-C): 12-step window + persistent hidden
+      state — legacy, ablation-only.
+    """
 
     ACTION_NAMES = [
         "SVC_14",
@@ -160,17 +189,17 @@ class System1Controller:
         "TCSC_16_17",
         "UPFC_26_shunt",
         "UPFC_26_series_p",
-        "UPFC_26_series_q",
+        "UPFC_26_series_q",   # RESERVED — forced neutral below
         "EV_3",
         "EV_8",
         "EV_15",
     ]
     ACTION_LO = np.array(
-        [-0.5, -1.0, 0.3, -0.5, -0.5, -0.5, -50.0, -50.0, -50.0],
+        [-0.5, -1.0, 0.3, -0.5, -0.5, 0.0, -50.0, -50.0, -50.0],
         dtype=np.float32,
     )
     ACTION_HI = np.array(
-        [0.5, 1.0, 0.7, 0.5, 0.5, 0.5, 50.0, 50.0, 50.0],
+        [0.5, 1.0, 0.7, 0.5, 0.5, 0.0, 50.0, 50.0, 50.0],
         dtype=np.float32,
     )
 
@@ -179,29 +208,47 @@ class System1Controller:
         model: CNNLSTM,
         encoder: StateEncoder,
         device: torch.device | str = "cpu",
+        temporal_mode: str = "window_reset",
+        seq_len: int = 12,
     ) -> None:
+        if temporal_mode not in ("window_reset", "streaming_persistent",
+                                 "window_persistent"):
+            raise ValueError(f"unknown temporal_mode: {temporal_mode!r}")
         self.model = model
         self.encoder = encoder
         self.device = torch.device(device)
         self.model.eval()
+        self.temporal_mode = temporal_mode
+        self.seq_len = seq_len
         self._hidden = None
         self._window: list[np.ndarray] = []
-        self.seq_len = 12
 
     @torch.no_grad()
     def act(self, obs: dict, env) -> dict:
         raw = self.encoder.encode(obs)
-        self._window.append(raw)
-        if len(self._window) > self.seq_len:
-            self._window = self._window[-self.seq_len:]
-        while len(self._window) < self.seq_len:
-            self._window.insert(0, raw)
-        x = torch.tensor(
-            np.stack(self._window), dtype=torch.float32
-        ).unsqueeze(0).to(self.device)
-        actions, self._hidden = self.model(x, self._hidden)
+        if self.temporal_mode == "streaming_persistent":
+            x = torch.tensor(raw, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
+            x = x.to(self.device)
+            actions, self._hidden = self.model(x, self._hidden)
+        else:
+            self._window.append(raw)
+            if len(self._window) > self.seq_len:
+                self._window = self._window[-self.seq_len:]
+            while len(self._window) < self.seq_len:
+                self._window.insert(0, raw)
+            x = torch.tensor(
+                np.stack(self._window), dtype=torch.float32
+            ).unsqueeze(0).to(self.device)
+            hidden = self._hidden if self.temporal_mode == "window_persistent" else None
+            actions, hidden_out = self.model(x, hidden)
+            if self.temporal_mode == "window_persistent":
+                self._hidden = hidden_out
         a = actions.cpu().numpy().flatten()
         a = np.clip(a, self.ACTION_LO, self.ACTION_HI)
+        # Reserved dimension (UPFC series-Q) is physically inactive in the
+        # Stage-1 models: force neutral so it can neither reach the
+        # environment nor influence any effort penalty.
+        a[5] = 0.0
         controls: dict = {"facts": {}, "ev": {}}
         controls["facts"]["SVC_14"] = float(a[0])
         controls["facts"]["STATCOM_39"] = float(a[1])

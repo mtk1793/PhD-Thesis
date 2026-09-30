@@ -1,0 +1,12 @@
+claim_id,scenario_id,run_id,date,hardware_target,OPAL_RT_model,RT_LAB_version,solver,time_step,core_mapping,controller_commit,model_checkpoint,dataset_window,fault_or_event,raw_log,processing_script,metric,value,units,figure,table,status_in_repo,required_action
+HIL-001,TBD,null,null,OPAL-RT 4-core,TBD,TBD,ARTEMIS/ss,TBD,Core4 I/O,TBD,TBD,TBD,n/a,NOT_IN_REPO,null,0.31,ms,fig_hil_timing,T11.6,MISSING,"locate raw log and config; else downgrade wording to representative design-budget figure"
+HIL-002,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core1 System1,TBD,TBD,TBD,n/a,NOT_IN_REPO,null,3.9,ms,fig_hil_timing,T11.6,MISSING,locate raw log
+HIL-003,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core3 arbiter,TBD,TBD,TBD,n/a,NOT_IN_REPO,null,7.4,ms,fig_hil_timing,T11.6,MISSING,locate raw log
+HIL-004,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core2 System2,TBD,TBD,TBD,n/a,NOT_IN_REPO,null,41.0,ms,fig_hil_timing,T11.6,MISSING,locate raw log
+HIL-005,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core3 detection,TBD,TBD,TBD,fault replay,NOT_IN_REPO,null,8.6,ms,T11.7,MISSING,locate raw log
+HIL-006,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,multi-core scaling,TBD,TBD,TBD,n/a,NOT_IN_REPO,null,86.7,percent,fig_hil_timing,T11.6,MISSING,locate raw log
+HIL-007,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core2/3 V2G,TBD,TBD,TBD,V2G activation,NOT_IN_REPO,null,320,ms,T11.9,MISSING,locate raw log
+HIL-008,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core2/3 V2G,TBD,TBD,TBD,frequency event,NOT_IN_REPO,null,45,MW/s,T11.9,MISSING,locate raw log
+HIL-009,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core2/3 V2G,TBD,TBD,TBD,frequency event,NOT_IN_REPO,null,0.011,Hz,T11.9,MISSING,locate raw log
+HIL-010,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core3 cyber,TBD,TBD,TBD,4 FDI scenarios,NOT_IN_REPO,null,93.8-98.2,percent,T11.10,MISSING,locate raw log
+HIL-011,TBD,null,null,OPAL-RT 4-core,TBD,TBD,TBD,TBD,Core3 cyber,TBD,TBD,TBD,4 FDI scenarios,NOT_IN_REPO,null,41-55,ms,T11.10,MISSING,locate raw log

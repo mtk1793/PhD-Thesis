@@ -1,0 +1,198 @@
+# 10_FINAL_NUMBERS_SSOT.yaml
+# Single source of truth for all final numerical values used in the thesis.
+# Master plan §3: no chapter may hard-code a performance value independently
+# once this file exists. Every value carries an evidence class E1-E5.
+#
+# Status codes:
+#   FROZEN        — measured, traceable, final for the thesis
+#   SUPERSEDED    — Stage-1 value retained for provenance only; replaced by rerun
+#   PENDING_RERUN — fill from the revised pipeline outputs (phase4_v2/5_v2/5b/6_v2/7/8)
+#
+# Rerun commands (repository root: capsim_sim/):
+#   python scripts/phase4_system1.py            # System 1 leakage-free retrain
+#   python scripts/phase5_system2.py            # System 2 counterfactual evaluation
+#   python scripts/phase5b_surrogate_validation.py
+#   python scripts/phase6_arbiter.py            # full CAPSM
+#   python scripts/phase7_ablations.py          # QIRL + arbiter ablations
+#   python scripts/phase8_statistics.py         # bootstrap statistics
+#   python scripts/phase4b_seasonal.py          # full-2019 seasonal evaluation
+
+metadata:
+  plan: CAPSM_Thesis_Final_Rebuild_Master_Plan_2026-09-30.md
+  repo_commit_at_freeze: c888156
+  created: 2026-09-30
+
+offline:
+  dataset_window: "OPSD 60min singleindex, 2015-01-01 to 2020-09-30"
+  split:
+    train: [2015, 2016, 2017]
+    val: 2018
+    test: [2019]
+    primary_test_window: "2019-01-01 to 2019-01-31"
+  capsm:
+    violation_bus_hours:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      source: results/phase6_v2/phase6_v2_summary.json
+      stage1_value: 2813          # SUPERSEDED (pre-revision pipeline)
+    system2_violation_bus_hours:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      source: results/phase5_v2/phase5_v2_summary.json
+      stage1_value: 2810          # SUPERSEDED
+    system1_violation_bus_hours:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      source: results/phase4_v2/phase4_v2_summary.json
+      stage1_value: 2822          # SUPERSEDED
+    nocontrol_violation_bus_hours:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      source: results/phase4_v2/phase4_v2_summary.json (baselines_test)
+      stage1_value: 2847          # SUPERSEDED (rerun with revised metrics)
+    mean_losses_mw:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      stage1_value: {nocontrol: 46.11, system2: 46.19, capsm: 46.20}
+    capsm_step_time_ms:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      stage1_value: 36.5          # SUPERSEDED
+    system1_step_time_ms:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      stage1_value: {phase4: 63.0, phase6: 32.0}   # SUPERSEDED
+    system2_step_time_ms:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      stage1_value: {phase5: 21.1, phase6: 27.6}   # SUPERSEDED
+  system1_model:
+    trainable_parameters:
+      value: 137418
+      status: FROZEN
+      evidence: E1
+      note: "exact count; the ~250K figure is stored training-state overhead (optimiser + serialisation), not trainable parameters"
+    architecture: "CNN-LSTM-attention, 160 features, seq_len 12, window_reset (S1-A)"
+    bc_train_loss_final:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+      source: results/phase4_v2/phase4_v2_summary.json (per_seed.train_loss_final)
+    bc_val_loss_final:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+    action_mae_2018:
+      value: null
+      status: PENDING_RERUN
+      evidence: E1
+  qirl:
+    n_candidates: 32
+    beta: 5.0
+    tunnel_rate: 0.1
+    reserved_index: 5
+    scope: "one-step candidate optimisation; 6-step horizon reserved (NOT implemented)"
+    reward: "Eq 4.10 — candidate-dependent counterfactual reward (E1, code capsm/agents/evaluators.py)"
+    surrogate_validation:
+      spearman_rho_mean: {value: null, status: PENDING_RERUN, evidence: E1, source: results/phase5b/surrogate_validation.json}
+      top1_agreement: {value: null, status: PENDING_RERUN, evidence: E1}
+      topk3_overlap: {value: null, status: PENDING_RERUN, evidence: E1}
+      voltage_mae_pu: {value: null, status: PENDING_RERUN, evidence: E1}
+      surrogate_ms_mean: {value: null, status: PENDING_RERUN, evidence: E1}
+  convergence:
+    jan2019_powerflow_success:
+      value: "100%"
+      status: FROZEN
+      evidence: E1
+      note: "rerun confirms or replaces; verify from phase6_v2 summary"
+  multi_system:
+    ieee_9_14_39_118_pipeline_convergence:
+      value: "100%"
+      status: FROZEN
+      evidence: E1
+      claim_label: "multi-system pipeline portability (NOT controller generalisation)"
+
+hil:
+  system1_latency_ms:
+    value: 3.9
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+    note: "locate raw OPAL-RT log before submission; else downgrade wording"
+  system2_latency_ms:
+    value: 41.0
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  arbiter_latency_ms:
+    value: 7.4
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  io_latency_ms:
+    value: 0.31
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  fault_detector_latency_ms:
+    value: 8.6
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  parallel_efficiency_16nodes_pct:
+    value: 86.7
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  v2g_activation_ms:
+    value: 320
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  freq_ramp_mw_per_s:
+    value: 45
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  frequency_error_hz:
+    value: 0.011
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  cyber_detection_pct:
+    value: [93.8, 98.2]
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+  cyber_recovery_ms:
+    value: [41, 55]
+    status: FROZEN_PENDING_PROVENANCE
+    evidence: E2
+    run_id: null
+
+design_targets:
+  voltage_deviation_reduction_pct: {value: 32.7, evidence: E4, source: "framework specification"}
+  stability_enhancement_pct: {value: 42, evidence: E4, source: "framework specification"}
+  qirl_convergence_speedup_pct: {value: [58, 59], evidence: E4, source: "framework specification"}
+  system1_budget_ms: {value: 5.0, evidence: E4}
+  system2_budget_ms: {value: 50.0, evidence: E4}
+  arbiter_budget_ms: {value: 10.0, evidence: E4}
+  fault_detection_accuracy_pct: {value: 95.8, evidence: E4}
+  constraint_compliance: {value: "by-construction admissibility envelope (no % claim)", evidence: E4}
+  economic_npv_musd: {value: 378.6, evidence: E4, note: "economic design study, IEEE-118, never present as measured CAPSM performance"}
+  economic_irr_pct: {value: 83.7, evidence: E4}
+  economic_payback_years: {value: 1.7, evidence: E4}
+  economic_annual_savings_pct: {value: 12.4, evidence: E4}
+
+replication:
+  package: CAPSM_NonHIL_Replication
+  evidence: E3
+  items: [system1_faults, system2_qirl_dqn, hmarl_scaling, pinn_constraints]
