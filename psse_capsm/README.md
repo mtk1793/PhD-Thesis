@@ -95,3 +95,18 @@ input feature mapping, action timing and simulator import tests pass.
    PSS/E runs; design targets; independently traceable HIL results.
 
 See docs/PRESENTATION_ALIGNMENT.md and docs/VALIDATION_GATES.md.
+
+## Structural case and OPSD preparation (before licensed runs)
+
+    python -m psse_capsm.case_audit --case "C:\CAPSM\IEEE39_NewEngland_REPAIRED_v33.raw" --output case_audit.json
+
+    python -m psse_capsm.prepare_opsd --input cleaned_opsd_hourly.csv --output profiles_2015_2019.csv
+
+The RAW audit checks source hashes, two-winding transformer branch counts,
+and the actual IEEE39 bus types (bus 31 slack, bus 39 PV); it cannot certify
+PSS/E import or electrical convergence. The OPSD converter uses **training
+years 2015–2017 only** to derive scaling statistics and preserves later
+validation/test timestamps. It expects a *pre-cleaned* hourly CSV and rejects
+NaN and duplicate timestamps. Train/test data must never be rescaled from
+a full-period mean.
+
