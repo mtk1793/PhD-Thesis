@@ -80,10 +80,33 @@ class RawCase:
         return [int(float(fields(self.lines[i])[0])) for i in self.section_indices["BUS"]]
 
     def branch_records(self):
+        """In PSS/E, two-winding transformers are a separate RAW section.
+
+        They must still count as electrical branches for the 160-feature
+        IEEE-39 CAPSM state (34 lines + 12 transformers = 46).
+        """
         result = []
         for i in self.section_indices["BRANCH"]:
             r = fields(self.lines[i])
             result.append((int(r[0]), int(r[1]), r[2], float(r[6]), int(float(r[13])) if len(r) > 13 else 1))
+        xfmr_lines = self.section_indices["TRANSFORMER"]
+        offset = 0
+        while offset < len(xfmr_lines):
+            first = fields(self.lines[xfmr_lines[offset]])
+            if len(first) < 12:
+                raise ValueError("Malformed transformer record")
+            k_bus = int(float(first[2]))
+            n_records = 5 if k_bus else 4
+            if offset + n_records > len(xfmr_lines):
+                raise ValueError("Incomplete transformer record group")
+            if k_bus:
+                raise NotImplementedError("3-winding transformer requires a separate branch mapping")
+            winding1 = fields(self.lines[xfmr_lines[offset + 2]])
+            # winding 1 record: WINDV1, NOMV1, ANG1, RATA1, ...
+            rate_a = float(winding1[3])
+            result.append((int(first[0]), int(first[1]), first[3],
+                           rate_a, int(float(first[11]))))
+            offset += n_records
         return result
 
     def generators(self):
