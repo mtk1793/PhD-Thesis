@@ -405,7 +405,8 @@ def add_conclusion_status(doc):
 
 def assert_quality(doc, output):
     paragraphs=[p.text for p in doc.paragraphs]
-    joined="\n".join(paragraphs)
+    joined="\n".join(paragraphs) + "\n" + "\n".join(
+        cell.text for table in doc.tables for row in table.rows for cell in row.cells)
     chapters=[i for i in range(1,14)
               if any(("Chapter %d:"%i) in t for t in paragraphs)]
     if len(chapters) != 13:
