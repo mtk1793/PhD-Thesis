@@ -29,8 +29,9 @@ rebuild is authoritative when slide targets conflict with runnable code.
   PSS/E sequentially for exact reference outcomes.
 - System 1 training must obey chronological 2015–2017/2018/2019 partition
   and window_reset temporal convention.
-- The historical STATCOM@39 is on the IEEE 39-bus slack bus, a weak
-  voltage-control placement in the simplified network. Keep it as a
+- The historical STATCOM@39 is on a PV generator-regulated bus, not
+  the slack bus; bus 31 is the slack. The strong voltage regulation makes
+  the shunt weak as an independent voltage-control actuator. Keep it as a
   labelled legacy configuration, then test sensitivity-guided alternatives.
 - The real data are German 50 Hz time-profile shapes on a 60 Hz IEEE
   New England test-system model. This is profile transfer, not a physical
