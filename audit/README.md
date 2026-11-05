@@ -44,3 +44,17 @@ compensation cannot move voltage (verified by regression test
 already-documented placement limitation (violation cluster at buses 22–29
 outside device reach), this strengthens the Phase J case for placement
 re-optimisation and is consistent with the modest ~1% violation deltas.
+
+
+## November 2026 PSS/E module and correction
+
+A new [PSS/E evidence ledger](12_PSSE_EVIDENCE_LEDGER.md) (E6) records
+prospective simulation experiments. It does not replace E1–E5.
+
+**IEEE-39 bus identity correction:** The original MATPOWER case39.m (also
+committed in HIL_Project/python/data/) identifies **bus 31 as the slack
+bus** and **bus 39 as a generator-regulated PV bus**. The older paragraph
+calling bus 39 the slack bus is incorrect. The observed low voltage
+sensitivity of a fixed shunt at bus 39 is consistent with regulation at a
+PV bus; it should not be attributed to slack-bus assignment. The original
+audit text is preserved above as historical provenance.
