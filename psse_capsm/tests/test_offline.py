@@ -102,3 +102,27 @@ def test_psse_adapter_contract_with_fake():
     result=Psse35(psspy_module=FakePsse()).solve("fake.raw",[1,2],[(1,2,"1",100,1)],[(1,"1")])
     assert result["converged"] and result["losses_mw"]==2.0
     assert result["thermal_overload_count"]==0
+
+
+def test_generic_case_audit(tmp_path):
+    from psse_capsm.case_audit import audit
+    file=tmp_path/"sample.raw"
+    file.write_text(SYNTH_RAW)
+    report=audit(file,require_ieee39=False)
+    assert report["status"]=="PASS_STRUCTURAL"
+    assert report["n_branch_total"]==2
+    assert report["slack_bus_ids"]==[1]
+
+def test_opsd_converter_uses_training_period_only(tmp_path):
+    from psse_capsm.prepare_opsd import prepare
+    source=tmp_path/"opsd.csv"
+    output=tmp_path/"profile.csv"
+    source.write_text("timestamp,load_actual_mw,wind_onshore_mw,wind_offshore_mw,solar_mw\n"
+                      "2015-01-01T00:00Z,100,20,10,5\n"
+                      "2016-01-01T00:00Z,200,30,20,10\n"
+                      "2018-01-01T00:00Z,1000,50,30,25\n")
+    report=prepare(source,output,base_load_mw=6254.0)
+    assert report["train_rows"]==2
+    rows=list(read_profiles(output))
+    assert abs(rows[0]["load_scale"]-2/3)<1e-6
+    assert abs(rows[2]["load_scale"]-1000/150)<1e-6
