@@ -1,0 +1,55 @@
+name: Generate CAPSM thesis PSS-E revised Word document
+on:
+  push:
+    branches: ['feature/thesis-psse-docx-nov2026']
+    paths:
+      - 'scripts/update_thesis_psse_nov2026.py'
+      - '.github/workflows/build-capsm-thesis-nov2026.yml'
+  pull_request:
+    paths:
+      - 'scripts/update_thesis_psse_nov2026.py'
+      - '.github/workflows/build-capsm-thesis-nov2026.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/thesis-psse-docx-nov2026
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install python-docx Pillow
+      - name: Revise complete thesis while retaining figures and tables
+        run: python scripts/update_thesis_psse_nov2026.py
+      - name: Verify Word ZIP integrity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          p=Path("CAPSM_Thesis_AcademicPaper_Updated_2026-11-04.docx")
+          with ZipFile(p) as z:
+              assert z.testzip() is None
+              print("DOCX contains",len(z.namelist()),"ZIP members")
+          assert p.stat().st_size > 1000000
+          PY
+      - name: Commit revised DOCX on same research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CAPSM_Thesis_AcademicPaper_Updated_2026-11-04.docx
+          if ! git diff --cached --quiet; then
+            git commit -m "Build November 2026 evidence-bounded CAPSM thesis DOCX"
+            git push origin HEAD:feature/thesis-psse-docx-nov2026
+          fi
+      - name: Upload Word document as build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CAPSM_Thesis_AcademicPaper_Updated_2026-11-04
+          path: CAPSM_Thesis_AcademicPaper_Updated_2026-11-04.docx
+          retention-days: 30
