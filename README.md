@@ -1,5 +1,24 @@
 # CAPSM PhD Thesis - Delivery Package
 
+## PSS/E v35 simulation-first implementation (November 2026)
+
+The new [psse_capsm/](psse_capsm/) module adds an isolated PSS/E v35
+quasi-static AC simulation workflow aligned with the September 2026 CAPSM
+defence presentation and the September 30 scientific rebuild. It includes
+RAW editing, FACTS/EV static equivalents, physically constrained EV dispatch,
+candidate-specific exact AC evaluations, scenario logging, an offline test
+suite, and a presentation traceability/audit document.
+
+**Status:** code available for review; PSS/E licence-specific import, API
+compatibility and convergence are not verified by the authoring environment.
+It does not replace the existing PYPOWER results, HIL evidence, final
+thesis numbers, or the current PyTorch controller implementation.
+
+See [simulation README](psse_capsm/README.md),
+[presentation alignment](psse_capsm/docs/PRESENTATION_ALIGNMENT.md), and
+[validation gates](psse_capsm/docs/VALIDATION_GATES.md).
+
+
 This package contains the complete PhD thesis written from the mtk1793/PhD-Thesis
 repository and the CAPSM_Thesis_Writing_Plan.md 90-day plan.
 
