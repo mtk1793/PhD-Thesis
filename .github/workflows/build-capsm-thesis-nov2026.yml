@@ -5,6 +5,10 @@ on:
     paths:
       - 'scripts/update_thesis_psse_nov2026.py'
       - '.github/workflows/build-capsm-thesis-nov2026.yml'
+  pull_request:
+    paths:
+      - 'scripts/update_thesis_psse_nov2026.py'
+      - '.github/workflows/build-capsm-thesis-nov2026.yml'
   workflow_dispatch:
 permissions:
   contents: write
