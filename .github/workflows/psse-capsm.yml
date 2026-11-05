@@ -1,0 +1,21 @@
+name: CAPSM PSS-E simulation offline regression
+on:
+  push:
+    paths:
+      - 'psse_capsm/**'
+      - '.github/workflows/psse-capsm.yml'
+  pull_request:
+    paths:
+      - 'psse_capsm/**'
+      - '.github/workflows/psse-capsm.yml'
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install pytest
+      - run: python -m pytest psse_capsm/tests -q
+      - run: python -m compileall -q psse_capsm
