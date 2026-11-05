@@ -18,6 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: feature/thesis-psse-docx-nov2026
           persist-credentials: true
       - uses: actions/setup-python@v5
         with:
