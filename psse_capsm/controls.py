@@ -62,7 +62,7 @@ def apply_action(case: RawCase, action, fleet: EVFleet, hours=1.0,
 
     SVC/STATCOM/UPFC-shunt are fixed-B susceptance equivalents, NOT dynamic
     device models. UPFC series is an X compensation proxy, not injected P/Q.
-    The slack-bus STATCOM is intentionally retained as the historical setup;
+    The generator-regulated bus-39 STATCOM is intentionally retained as the historical setup;
     relocation is an explicit experiment.
     """
     a = clamp_action(action)
