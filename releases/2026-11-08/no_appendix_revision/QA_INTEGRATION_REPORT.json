@@ -1,0 +1,36 @@
+{
+  "source": "CAPSM_PhD_Thesis_Final_313pg_2026-11-08.docx",
+  "output": "CAPSM_Thesis_NoAppendix_Integrated_2026-11-08.docx",
+  "original_appendices": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "relocated_full_sections": [
+    "D->11.3",
+    "E->11.2",
+    "A/B/C->14"
+  ],
+  "archived_only": [
+    "F",
+    "G",
+    "H"
+  ],
+  "archived_node_counts": {
+    "F": 258,
+    "G": 290,
+    "H": 25
+  },
+  "changed_run_count": 1,
+  "paragraph_count": 937,
+  "table_count": 142,
+  "residual_appendix_heading_count": 0,
+  "has_chapter_14": true,
+  "target_250_body_pages_verified": false,
+  "warning": "Original main-text 250-page requirement is NOT established by this structural integration; page count and substantive additions require a separate expansion gate."
+}
