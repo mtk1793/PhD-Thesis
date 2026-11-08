@@ -1,5 +1,8 @@
 # CAPSM THESIS FACTSHEET — Single Source of Truth (read first, cite only these numbers)
 
+> **SUPPLEMENTAL EVIDENCE CONTROL — 2026-11-08:** A later, independently scoped licensed PSS/E 33.4 AC QSTS campaign is documented in [this reconciliation](../thesis_updates/2026-11-08/PSSE33_EVIDENCE_RECONCILIATION.md). The campaign established solver agreement, candidate-execution mechanics and reproducibility, but **not** N−1 security or statistically robust controller superiority on its 24-hour study window. Its 2,256 contingency solves, three-seed performance intervals, 49 offline software tests and 2019 held-out baseline are a **separate evidence class** from Stage-1 results, any HIL-campaign measurements and design targets. Do not attribute HIL, EMT, dynamic stability, PINN or HMARL performance to the PSS/E-33 ZIP. The pre-existing factsheet remains historical for claims that have their own independent original sources.
+
+
 **Thesis title:** Cognitive Adaptive Power System Management (CAPSM): A Brain-Inspired Dual-Process AI Framework for Coordinated Control of FACTS Devices, EV Fleets, and DERs — Validated Through Controller-Hardware-in-the-Loop Testing on a 4-Core OPAL-RT Real-Time Simulator
 **Author:** Mahmoud Kiasari, PhD Candidate, Department of Electrical and Computer Engineering, Dalhousie University, Halifax, Nova Scotia, Canada
 **Degree:** Doctor of Philosophy (Electrical Engineering)
