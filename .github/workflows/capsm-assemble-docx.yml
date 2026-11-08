@@ -1,0 +1,35 @@
+name: Assemble CAPSM thesis Word binary from integrity-checked source chunks
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/capsm-assemble-docx.yml'
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct DOCX and verify SHA-256
+        run: |
+          mkdir -p releases/2026-11-08
+          cat releases/2026-11-08/parts/docx_*.b64 | base64 --decode > releases/2026-11-08/CAPSM_PhD_Thesis_University_Style_2026-11-08.docx
+          echo 'f46c239792a793357e2eefe8f1fb8679a310e5481b29f34cdd53a0ea000ca48c  releases/2026-11-08/CAPSM_PhD_Thesis_University_Style_2026-11-08.docx' | sha256sum --check
+          python - <<'PY'
+          import zipfile
+          p='releases/2026-11-08/CAPSM_PhD_Thesis_University_Style_2026-11-08.docx'
+          with zipfile.ZipFile(p) as z:
+              assert z.testzip() is None
+              assert 'word/document.xml' in z.namelist()
+          print('Verified Word package')
+          PY
+      - name: Publish DOCX as GitHub repository binary
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -f releases/2026-11-08/parts/docx_*.b64
+          git add releases/2026-11-08/CAPSM_PhD_Thesis_University_Style_2026-11-08.docx
+          git commit -m "Publish verified 312-page CAPSM thesis Word manuscript"
+          git push
