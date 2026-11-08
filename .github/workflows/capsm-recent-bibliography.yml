@@ -1,0 +1,30 @@
+name: CAPSM 2020-2026 DOI bibliography (200 verified items)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/fetch_recent_crossref.py'
+      - '.github/workflows/capsm-recent-bibliography.yml'
+permissions:
+  contents: write
+jobs:
+  bibliography:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Query Crossref DOI registry and validate 200 works
+        run: |
+          python scripts/fetch_recent_crossref.py --output-dir references --limit 200 --asof 2026-11-08 --rows 100
+      - name: Commit reproducible bibliography and audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add references/CAPSM_2020_2026_200_crossref*
+          if ! git diff --cached --quiet; then
+            git commit -m "Add DOI-registered 2020-2026 CAPSM bibliography and audit"
+            git push
+          fi
