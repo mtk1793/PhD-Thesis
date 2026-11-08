@@ -28,3 +28,13 @@ jobs:
             git commit -m "Add DOI-registered 2020-2026 CAPSM bibliography and audit"
             git push
           fi
+
+      - name: Publish validated bibliography as downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: capsm-2020-2026-bibliography
+          path: |
+            references/CAPSM_2020_2026_200_crossref.bib
+            references/CAPSM_2020_2026_200_crossref_index.csv
+            references/CAPSM_2020_2026_200_crossref_audit.json
+          retention-days: 30
