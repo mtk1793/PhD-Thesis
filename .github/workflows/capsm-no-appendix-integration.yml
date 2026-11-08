@@ -1,0 +1,80 @@
+name: CAPSM No-Appendix Evidence-Bounded Word Revision
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/capsm-no-appendix-integration.yml'
+      - 'scripts/apply_no_appendix_update_2026.py'
+      - 'thesis_updates/2026-11-08/CAPSM_250pp_NoAppendix_Blueprint.md'
+      - 'thesis_updates/2026-11-08/NO_APPENDIX_INTEGRATION_CONTROLS.md'
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout canonical thesis repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install document tools
+        run: python -m pip install python-docx lxml
+      - name: Apply scientific and structural no-appendix integration
+        run: |
+          python scripts/apply_no_appendix_update_2026.py \
+            --source releases/2026-11-08/CAPSM_PhD_Thesis_Final_313pg_2026-11-08.docx \
+            --outdir releases/2026-11-08/no_appendix_revision
+      - name: Create evidence-bounded revision ZIP
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          import json
+          root=Path('.')
+          folder=root/'releases/2026-11-08/no_appendix_revision'
+          report=json.loads((folder/'QA_INTEGRATION_REPORT.json').read_text())
+          assert report['has_chapter_14']
+          assert report['residual_appendix_heading_count']==0
+          assert report['target_250_body_pages_verified'] is False
+          names=[
+            'releases/2026-11-08/CAPSM_PhD_Thesis_Final_313pg_2026-11-08.docx',
+            'references/CAPSM_2020_2026_200_crossref.bib',
+            'scripts/apply_no_appendix_update_2026.py',
+            'thesis_updates/2026-11-08/CAPSM_250pp_NoAppendix_Blueprint.md',
+            'thesis_updates/2026-11-08/NO_APPENDIX_INTEGRATION_CONTROLS.md',
+          ]
+          files=[root/x for x in names]
+          files += [x for x in folder.rglob('*') if x.is_file() and x.suffix in {'.docx','.json','.tsv'}]
+          dest=folder/'CAPSM_NoAppendix_Integration_Package_2026-11-08.zip'
+          with ZipFile(dest,'w',ZIP_DEFLATED,compresslevel=6) as z:
+            for f in files:
+              assert f.exists(),f
+              z.write(f,arcname=str(f.relative_to(root)))
+          with ZipFile(dest) as z:assert z.testzip() is None
+          print('Bundled',len(files),'files, zip bytes',dest.stat().st_size)
+          PY
+      - name: Upload integration artifacts (no 250-page claim)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CAPSM-NoAppendix-Integration-2026-11-08
+          path: |
+            releases/2026-11-08/no_appendix_revision/CAPSM_Thesis_NoAppendix_Integrated_2026-11-08.docx
+            releases/2026-11-08/no_appendix_revision/CAPSM_NoAppendix_Integration_Package_2026-11-08.zip
+            releases/2026-11-08/no_appendix_revision/QA_INTEGRATION_REPORT.json
+          retention-days: 30
+      - name: Commit exact generated revision and archival TSV records
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/2026-11-08/no_appendix_revision
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish CAPSM no-appendix structural integration and audit bundle"
+            git push origin HEAD:master
+          fi
