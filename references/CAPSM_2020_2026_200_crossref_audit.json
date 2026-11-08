@@ -1,0 +1,28 @@
+{
+  "provenance": "Crossref REST API",
+  "generated_at": "2026-11-08T21:19:09.878232+00:00",
+  "as_of": "2026-11-08",
+  "count": 200,
+  "years": {
+    "2024": 28,
+    "2022": 28,
+    "2020": 15,
+    "2026": 49,
+    "2023": 30,
+    "2025": 37,
+    "2021": 13
+  },
+  "distinct_doi": 200,
+  "sha256": "b97404172f0cb8d004b4f379961702c0358d5d02f619b42d4e51f82b1ba5db63",
+  "queries_checked": {
+    "power system reinforcement learning control": 45,
+    "smart grid multi-agent reinforcement learning": 25,
+    "physics-informed neural network power system": 20,
+    "electrical power system digital twin": 28,
+    "electric vehicle charging scheduling reinforcement learning": 95,
+    "power system security deep learning": 48,
+    "FACTS devices voltage control optimization": 69,
+    "power system transient stability machine learning": 88
+  },
+  "limitation": "Pool of relevant journal literature only; not a validation of claims, fulltext access, citation usage or absence of retractions"
+}
