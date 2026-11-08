@@ -121,8 +121,8 @@ def main():
  rows=sorted(seen.values(),key=lambda x:(-x[0],-year_of(x[1]),x[1]['DOI']))[:args.limit]
  if len(rows)<args.limit:
   raise RuntimeError('Insufficient independently registered articles: %d < %d; do not fabricate to meet quota'%(len(rows),args.limit))
- txt='% CAPSM supplemental recent-literature pool; metadata from Crossref, date %s.\n'%asof
- txt+='% %d DOI-registered journal articles. Not automatically cited by the thesis.\n\n'%len(rows)
+ txt='%% CAPSM supplemental recent-literature pool; metadata from Crossref, date %s.\n'%asof
+ txt+='%% %d DOI-registered journal articles. Not automatically cited by the thesis.\n\n'%len(rows)
  for i,(sc,item,q) in enumerate(rows,1):txt+=bib_entry(i,item)+'\n'
  stem='CAPSM_2020_2026_%d_crossref'%len(rows)
  bib=dest/(stem+'.bib');bib.write_text(txt,encoding='utf-8')
