@@ -1,0 +1,39 @@
+{
+  "input": "releases/2026-11-08/no_appendix_revision/CAPSM_Thesis_NoAppendix_Integrated_2026-11-08.docx",
+  "output": "releases/2026-11-09/CAPSM_PhD_Thesis_Model_Enhanced_2026-11-09.docx",
+  "paragraphs": 996,
+  "tables": 154,
+  "inline_shapes": 107,
+  "new_figure_files": [
+    "capsm_action_vector.png",
+    "capsm_control_contract.png",
+    "capsm_deployment_gates.png",
+    "capsm_evidence_boundaries.png",
+    "capsm_feature_schema.png",
+    "capsm_loss_comparison.png",
+    "capsm_n1_accounting.png",
+    "capsm_soc_examples.png",
+    "capsm_timing_comparison.png",
+    "capsm_week_convergence.png",
+    "equation_arbitration.png",
+    "equation_qirl.png",
+    "equation_soc.png"
+  ],
+  "new_table_captions": [
+    "Table 3.3: Action-model interface and physical interpretation",
+    "Table 3.4: Feasibility checks at the action-to-network boundary",
+    "Table 4.7: Controller-design interface and empirical scope",
+    "Table 4.8: State-interface reconciliation checkpoint",
+    "Table 8.6: Worked SoC balance for one aggregated station",
+    "Table 10.1: Evidence provenance and permitted inference",
+    "Table 10.2: Validation acceptance gates for future CAPSM campaigns",
+    "Table 11.1: Held-out daily solver-convergence ledger",
+    "Table 11.2: Preventive N-1 accounting and interpretation",
+    "Table 11.3: Distinguishing solver agreement, control benefit and security",
+    "Table 12.1: Deployment gate, failure consequence and required new evidence",
+    "Table 14.1: Claims and provenance accepted in this edition"
+  ],
+  "has_references": true,
+  "has_14_chapters": true,
+  "notes": "No new simulations executed; measured figures use existing thesis evidence, other figures conceptual/derived."
+}
