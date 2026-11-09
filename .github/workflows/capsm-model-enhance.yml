@@ -1,0 +1,66 @@
+name: Build CAPSM model-enhanced thesis DOCX
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/capsm-model-enhance.yml'
+      - 'scripts/upgrade_capsm_model_2026_11_09.py'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install document and plotting dependencies
+        run: python -m pip install --disable-pip-version-check python-docx matplotlib
+      - name: Build model-enhanced CAPSM thesis
+        run: |
+          python scripts/upgrade_capsm_model_2026_11_09.py \
+            releases/2026-11-08/no_appendix_revision/CAPSM_Thesis_NoAppendix_Integrated_2026-11-08.docx \
+            releases/2026-11-09/CAPSM_PhD_Thesis_Model_Enhanced_2026-11-09.docx \
+            releases/2026-11-09/model_figures
+      - name: Check Word integrity and update inventory
+        run: |
+          python - <<'PY'
+          import json, zipfile
+          from docx import Document
+          path='releases/2026-11-09/CAPSM_PhD_Thesis_Model_Enhanced_2026-11-09.docx'
+          with zipfile.ZipFile(path) as z:
+              assert z.testzip() is None
+          doc=Document(path)
+          assert len(doc.tables)>=154 and len(doc.inline_shapes)>=107
+          assert any(p.text=='References' for p in doc.paragraphs)
+          print('Verified: tables',len(doc.tables),'figures/images',len(doc.inline_shapes))
+          PY
+          cd releases/2026-11-09
+          zip -q -r CAPSM_Model_Enhanced_Source_and_Figures_2026-11-09.zip \
+            CAPSM_PhD_Thesis_Model_Enhanced_2026-11-09.docx \
+            CAPSM_MODEL_UPDATE_QA.json model_figures
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CAPSM-Model-Enhanced-2026-11-09
+          path: |
+            releases/2026-11-09/CAPSM_PhD_Thesis_Model_Enhanced_2026-11-09.docx
+            releases/2026-11-09/CAPSM_MODEL_UPDATE_QA.json
+            releases/2026-11-09/model_figures/
+            releases/2026-11-09/CAPSM_Model_Enhanced_Source_and_Figures_2026-11-09.zip
+      - name: Commit final DOCX, generated figures and QA
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/2026-11-09
+          if git diff --cached --quiet; then
+            echo "No file changes"
+          else
+            git commit -m "Publish CAPSM model-enhanced thesis DOCX with figures and audited tables"
+            git push origin HEAD:master
+          fi
