@@ -1,0 +1,32 @@
+name: Export CAPSM benchmark source models for reproducible validation
+on:
+  push:
+    paths:
+      - '.github/workflows/capsm-source-export-2026-11-09.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package canonical case data, methods and evidence summaries
+        run: |
+          mkdir -p export
+          cp -r HIL_Project/python/data export/matpower_cases
+          cp -r psse_capsm export/psse_capsm
+          mkdir -p export/evidence
+          cp thesis_updates/2026-11-08/PSSE33_EVIDENCE_RECONCILIATION.md export/evidence/
+          cp audit/12_PSSE_EVIDENCE_LEDGER.md export/evidence/
+          cp capsim_sim/results/phase2/phase2_summary.json export/evidence/
+          cp capsim_sim/results/phase3/phase3_summary.json export/evidence/
+          cp capsim_sim/results/phase6/phase6_summary.json export/evidence/
+          cp capsim_sim/reports/PHASE2_REPORT.md export/evidence/
+          cp capsim_sim/reports/PHASE3_REPORT.md export/evidence/
+          cp capsim_sim/reports/PHASE6_REPORT.md export/evidence/
+          printf 'Exported from commit %s\n' "$GITHUB_SHA" > export/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CAPSM-Source-Models-2026-11-09
+          path: export/
